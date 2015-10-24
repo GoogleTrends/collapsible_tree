@@ -39,6 +39,8 @@ body{
 
 function drawGraphic(){
 
+// modified from Mike Bostock's collapisble tree http://bl.ocks.org/mbostock/4339083 //
+
 var margin = {top: 20, right: 120, bottom: 20, left: 200},
     width = 960 - margin.right - margin.left,
     height = 800 - margin.top - margin.bottom;
@@ -48,6 +50,9 @@ var i = 0,
     root;
 
 var tree = d3.layout.tree()
+    .separation(function(a,b){
+      return (a.children == b.children ? 1:1.5);
+    })
     .size([height, width]);
 
 var diagonal = d3.svg.diagonal()
