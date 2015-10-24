@@ -107,7 +107,8 @@ function update(source) {
       .attr("r", function(d){
         return Math.sqrt(d.size) * 2;
       })
-      .style("fill", function(d) { return d._children ? "#c3574a" : "#fff"; });
+      .style("fill", function(d) { return d._children ? "#c3574a" : "#fff"; })
+      .style("stroke", function(d) { return d.name === "GOP Debate - CNBC"? "#fff" : "#c3574a"; });
 
   nodeEnter.append("text")
       .attr("x", function(d) { return d.name === "GOP Debate - CNBC"? -160 : 35; })
