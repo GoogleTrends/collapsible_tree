@@ -1,0 +1,321 @@
+{
+ "name": "GOP Debate - CNBC",
+ "size":20,
+ "children": [
+  {
+   "name": "Donald Trump",
+   "size": 100,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Ben Carson",
+   "size":34,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Carly Fiorina",
+   "size":24,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Jeb Bush",
+   "size":12,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Marco Rubio",
+   "size":10,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Ted Cruz",
+   "size":9,
+   "children": [
+   {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Rand Paul",
+   "size":6,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Chris Christie",
+   "size":4,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Mike Huckabee",
+   "size":3,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "John Kasich",
+   "size":3,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Lindsey Graham",
+   "size":2,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Bobby Jindal",
+   "size":2,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "George Pataki",
+   "size": 1,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Rick Santorum",
+   "size":1,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  },
+  {
+   "name": "Jim Gilmore",
+   "size":0,
+   "children": [
+    {"name": "Donald Trump", "size": 12},
+    {"name": "Ben Carson", "size": 12},
+    {"name": "Carly Fiorina", "size": 12},
+    {"name": "Jeb Bush", "size": 12},
+    {"name": "Marco Rubio", "size": 12},
+    {"name": "Ted Cruz", "size": 12 },
+    {"name": "Rand Paul", "size": 12},
+    {"name": "Chris Christie", "size": 12},
+    {"name": "Mike Huckabee", "size": 12},
+    {"name": "John Kasich", "size": 12},
+    {"name": "Lindsey Graham", "size": 12},
+    {"name": "Bobby Jindal", "size": 12},
+    {"name": "George Pataki", "size":12 },
+    {"name": "Rick Santorum", "size":12 },
+    {"name": "Jim Gilmore", "size":12 }
+   ]
+  }
+ ]
+}
