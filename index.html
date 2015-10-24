@@ -19,13 +19,13 @@ body{
 }
 
 .node text {
-  font: 16px sans-serif;
+  font: 15px sans-serif;
 }
 
 .link {
   fill: none;
   stroke: #ccc;
-  stroke-width: 2px;
+  stroke-width: 1.5px;
 }
 
 </style>
@@ -86,7 +86,7 @@ function update(source) {
       links = tree.links(nodes);
 
   // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 200; });
+  nodes.forEach(function(d) { d.y = d.depth * 300; });
 
   // Update the nodes…
   var node = svg.selectAll("g.node")
@@ -105,11 +105,11 @@ function update(source) {
       .style("fill", function(d) { return d._children ? "#c3574a" : "#fff"; });
 
   nodeEnter.append("text")
-      .attr("x", function(d) { return d.name === "GOP Debate - CNBC"? -180 : 35; })
+      .attr("x", function(d) { return d.name === "GOP Debate - CNBC"? -160 : 35; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.children || d._children ? "start" : "start"; })
       .text(function(d) { return d.name; })
-      .style("fill-opacity", 1e-6)
+      .style("fill-opacity", 0)
       .style("fill","#C53929");
     
 
@@ -143,13 +143,15 @@ function update(source) {
   var link = svg.selectAll("path.link")
       .data(links, function(d) { return d.target.id; });
 
+
   // Enter any new links at the parent's previous position.
   link.enter().insert("path", "g")
       .attr("class", "link")
       .attr("d", function(d) {
         var o = {x: source.x0 , y: source.y0};
         return diagonal({source: o , target: o });
-      });
+      })
+      .style("stroke-dasharray", ("3, 3"));
 
   // Transition links to their new position.
   link.transition()
@@ -183,6 +185,73 @@ function click(d) {
   }
   update(d);
 }
+
+var legendCircle = svg.append("circle")
+    .attr("cx", -100)
+    .attr("cy", 700)
+    .attr("r", 28)
+    .style("fill", "none")
+    .style("stroke", "grey")
+    .style("stroke-width", 1.5)
+    .style("stroke-dasharray", ("3,3"));
+
+var legendCircle = svg.append("circle")
+    .attr("cx", -100)
+    .attr("cy", 707)
+    .attr("r", function(){
+      return Math.sqrt(392);
+    })
+    .style("fill", "none")
+    .style("stroke", "grey")
+    .style("stroke-width", 1.5)
+    .style("stroke-dasharray", ("3,3"));
+
+var legendCircle = svg.append("circle")
+    .attr("cx", -100)
+    .attr("cy", 712)
+    .attr("r", function(){
+      return Math.sqrt(196);
+    })
+    .style("fill", "none")
+    .style("stroke", "grey")
+    .style("stroke-width", 1.5)
+    .style("stroke-dasharray", ("3,3"));
+
+var legend = svg.append("text")
+    .text("Google Search Index")
+    .attr("x", -100)
+    .attr("y", 650)
+    .attr("text-anchor","middle")
+    .style("font-size","12px")
+    .style("fill", "grey");
+    
+
+var legend100 = svg.append("text")
+    .text("100")
+    .attr("x", -100)
+    .attr("y", 670)
+    .attr("text-anchor","middle")
+    .style("font-size","12px")
+    .style("fill", "grey");
+
+var legend50 = svg.append("text")
+    .text("50")
+    .attr("x", -100)
+    .attr("y", 685)
+    .attr("text-anchor","middle")
+    .style("font-size","12px")
+    .style("fill", "grey");
+
+var legend25 = svg.append("text")
+    .text("25")
+    .attr("x", -100)
+    .attr("y",698)
+    .attr("text-anchor","middle")
+    .style("font-size","12px")
+    .style("fill", "grey");
+    
+
+
 
  // function responsivefy(svg) {
 
