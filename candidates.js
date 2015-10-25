@@ -1,4 +1,4 @@
-{
+var candidates = {
  "name": "GOP Debate - CNBC",
  "size":20,
  "children": [
