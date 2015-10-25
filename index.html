@@ -72,6 +72,8 @@ body {
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+        // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
+        // The children node expanding only works with .js data file. ! important
 
         root = candidates;
         root.x0 = height / 2;
@@ -245,6 +247,11 @@ body {
             }
 
             update(d);
+
+            var candidateSelect = $(this).text();
+            console.log(candidateSelect)
+
+            
         }
 
         // Add the circle legend 
