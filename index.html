@@ -19,7 +19,7 @@ body{
 }
 
 .node text {
-  font: 15px sans-serif;
+  font: 14px sans-serif;
 }
 
 .link {
@@ -33,7 +33,7 @@ body{
 
 <div id="graphic"></div>
 
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script>
 
@@ -41,9 +41,13 @@ function drawGraphic(){
 
 // modified from Mike Bostock's collapisble tree http://bl.ocks.org/mbostock/4339083 //
 
-var margin = {top: 20, right: 120, bottom: 20, left: 200},
-    width = 960 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+var screenWidth = $(window).width(),
+    screenHeight = $(window).height(),
+    mobileScreen = (screenWidth > 400 ? false : true);
+
+var margin = {top: 20, right: 20, bottom: 20, left: 200},
+    width = 960 - margin.left - margin.right,
+    height = screenHeight - margin.top - margin.bottom;
 
 var i = 0,
     duration = 750,
@@ -194,7 +198,7 @@ function click(d) {
 
 var legendCircle = svg.append("circle")
     .attr("cx", -100)
-    .attr("cy", 700)
+    .attr("cy", height - 50)
     .attr("r", 28)
     .style("fill", "none")
     .style("stroke", "grey")
@@ -203,7 +207,7 @@ var legendCircle = svg.append("circle")
 
 var legendCircle = svg.append("circle")
     .attr("cx", -100)
-    .attr("cy", 707)
+    .attr("cy", height - 42)
     .attr("r", function(){
       return Math.sqrt(392);
     })
@@ -214,7 +218,7 @@ var legendCircle = svg.append("circle")
 
 var legendCircle = svg.append("circle")
     .attr("cx", -100)
-    .attr("cy", 712)
+    .attr("cy", height - 37)
     .attr("r", function(){
       return Math.sqrt(196);
     })
@@ -226,7 +230,7 @@ var legendCircle = svg.append("circle")
 var legend = svg.append("text")
     .text("Google Search Index")
     .attr("x", -100)
-    .attr("y", 650)
+    .attr("y", height - 8)
     .attr("text-anchor","middle")
     .style("font-size","12px")
     .style("fill", "grey");
@@ -235,7 +239,7 @@ var legend = svg.append("text")
 var legend100 = svg.append("text")
     .text("100")
     .attr("x", -100)
-    .attr("y", 670)
+    .attr("y", height - 80)
     .attr("text-anchor","middle")
     .style("font-size","12px")
     .style("fill", "grey");
@@ -243,7 +247,7 @@ var legend100 = svg.append("text")
 var legend50 = svg.append("text")
     .text("50")
     .attr("x", -100)
-    .attr("y", 685)
+    .attr("y", height - 63)
     .attr("text-anchor","middle")
     .style("font-size","12px")
     .style("fill", "grey");
@@ -251,7 +255,7 @@ var legend50 = svg.append("text")
 var legend25 = svg.append("text")
     .text("25")
     .attr("x", -100)
-    .attr("y",698)
+    .attr("y", height - 50)
     .attr("text-anchor","middle")
     .style("font-size","12px")
     .style("fill", "grey");
