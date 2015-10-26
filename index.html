@@ -8,10 +8,6 @@ body {
 }
 
 
-/*.node {
-    cursor: pointer;
-}*/
-
 .node circle {
     fill: #000;
     stroke: #c3574a;
@@ -230,10 +226,9 @@ body {
                 d.x0 = d.x;
                 d.y0 = d.y;
             });
-        }
 
-        // Toggle children on click.
-        function click(d) {
+
+            function click(d) {
 
             if (d.children) {
                 d._children = d.children;
@@ -258,18 +253,41 @@ body {
 
             update(d);
 
-            var textSelect = d3.select(this);
 
+
+           var textSelect = d3.select(this); 
+           
             function selected() {
-                if (d.name !== "GOP Debate - CNBC") {
+
+                    nodeEnter.selectAll("text")
+                    .filter(function(d){
+                        return d.name === "GOP Debate - CNBC"
+                    })
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 0);
 
 
-                    // d.parent.name = d.name;
+                   $("#newParent").remove();
+                    
+                    // d.parent.name = d.name; 
 
-                    // console.log(d.parent.name)
+                    var newParent = svg.append("text")
+                        .attr("y", root.x)
+                        .attr("x", root.y - 65)
+                        .attr("id", "newParent")
+                        .attr("dy", ".35em")
+                        .style("fill", "#565555")
+                        .style("font-size","16px")
+                        .attr("text-anchor", "middle")
+                        .transition()
+                        .delay(500)
+                        .duration(250)
+                        .text(d.name);
+                        
 
                     textSelect.remove();
-                }
+               
             };
 
             selected();
@@ -279,6 +297,10 @@ body {
 
         }
 
+        }
+
+        // Toggle children on click.
+        
         // Add the circle legend 
 
         var legendCircle = svg.append("circle")
