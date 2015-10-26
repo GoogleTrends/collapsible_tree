@@ -236,6 +236,7 @@ body {
             } else {
                 d.children = d._children;
                 d._children = null;
+
             }
 
             // If the node has a parent, then collapse its child nodes
@@ -246,26 +247,45 @@ body {
                     if (d !== element) {
                         collapse(element);
                     }
-
                 });
 
             };
 
             update(d);
 
+            if(d.children){ 
 
 
-           var textSelect = d3.select(this); 
+            var textSelect = d.name;
+
+            console.log(textSelect)
            
-            function selected() {
+                function selected() {
+
+
+                    nodeEnter.selectAll("text").transition()
+                    .duration(500)
+                    .style("opacity", 1);
+
 
                     nodeEnter.selectAll("text")
                     .filter(function(d){
-                        return d.name === "GOP Debate - CNBC"
+                        return d.name === "GOP Debate - CNBC";
                     })
                     .transition()
                     .duration(500)
                     .style("opacity", 0);
+
+                    nodeEnter.selectAll("text")
+                    .filter(function(d){
+                        return d.name === textSelect;
+                    })
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 0);
+
+
+
 
 
                    $("#newParent").remove();
@@ -274,23 +294,22 @@ body {
 
                     var newParent = svg.append("text")
                         .attr("y", root.x)
-                        .attr("x", root.y - 65)
+                        .attr("x", root.y - 80)
                         .attr("id", "newParent")
                         .attr("dy", ".35em")
                         .style("fill", "#565555")
-                        .style("font-size","16px")
+                        .style("font-size","20px")
                         .attr("text-anchor", "middle")
                         .transition()
                         .delay(500)
                         .duration(250)
                         .text(d.name);
-                        
-
-                    textSelect.remove();
+                              
                
             };
 
             selected();
+        };
 
 
 
