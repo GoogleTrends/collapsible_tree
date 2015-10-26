@@ -263,7 +263,15 @@ body {
                 function selected() {
 
 
-                    nodeEnter.selectAll("text").transition()
+                    nodeEnter.selectAll("text")
+                    .attr('pointer-events', 'cursor')
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 1);
+
+                    nodeEnter.selectAll("circle")
+                    .attr('pointer-events', 'cursor')
+                    .transition()
                     .duration(500)
                     .style("opacity", 1);
 
@@ -280,12 +288,19 @@ body {
                     .filter(function(d){
                         return d.name === textSelect;
                     })
+                    .attr('pointer-events', 'none')
                     .transition()
                     .duration(500)
                     .style("opacity", 0);
 
-
-
+                    nodeEnter.selectAll("circle")
+                    .filter(function(d){
+                        return d.name === textSelect;
+                    })
+                    .attr('pointer-events', 'none')
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 0);
 
 
                    $("#newParent").remove();
