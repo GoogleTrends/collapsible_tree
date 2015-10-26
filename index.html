@@ -7,9 +7,10 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.node {
+
+/*.node {
     cursor: pointer;
-}
+}*/
 
 .node circle {
     fill: #000;
@@ -36,8 +37,6 @@ body {
     <script>
     function drawGraphic() {
 
-        // modified from Mike Bostock's collapisble tree http://bl.ocks.org/mbostock/4339083 //
-
         var screenHeight = $(window).height();
 
 
@@ -45,7 +44,7 @@ body {
                 top: 20,
                 right: 20,
                 bottom: 20,
-                left: 200
+                left: 180
             },
             width = 960 - margin.left - margin.right,
             height = screenHeight - margin.top - margin.bottom;
@@ -73,7 +72,7 @@ body {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
-        // The children node expanding only works with .js data file. ! important
+        // The children node expanding only works with .js data file!
 
         root = candidates;
         root.x0 = height / 2;
@@ -109,6 +108,7 @@ body {
                     return d.id || (d.id = ++i);
                 });
 
+
             // Enter any new nodes at the parent's previous position.
             var nodeEnter = node.enter().append("g")
                 .attr("class", "node")
@@ -116,6 +116,14 @@ body {
                     return "translate(" + source.y0 + "," + source.x0 + ")";
                 })
                 .on("click", click);
+
+            // Set "pointer-events" to all nodes, except for the root node 
+            nodeEnter.attr('pointer-events', 'all')
+                .filter(function(d) {
+                    return d.name === "GOP Debate - CNBC";
+                })
+                .attr('pointer-events', 'none');
+
 
             nodeEnter.append("circle")
                 .attr("r", function(d) {
@@ -130,7 +138,7 @@ body {
 
             nodeEnter.append("text")
                 .attr("x", function(d) {
-                    return d.name === "GOP Debate - CNBC" ? -160 : 35;
+                    return d.name === "GOP Debate - CNBC" ? -130 : 35;
                 })
                 .attr("dy", ".35em")
                 .attr("text-anchor", function(d) {
@@ -243,15 +251,32 @@ body {
                     if (d !== element) {
                         collapse(element);
                     }
+
                 });
-            }
+
+            };
 
             update(d);
 
-            var candidateSelect = $(this).text();
-            console.log(candidateSelect)
+            var textSelect = d3.select(this);
 
-            
+            function selected() {
+                if (d.name !== "GOP Debate - CNBC") {
+
+
+                    // d.parent.name = d.name;
+
+                    // console.log(d.parent.name)
+
+                    textSelect.remove();
+                }
+            };
+
+            selected();
+
+
+
+
         }
 
         // Add the circle legend 
