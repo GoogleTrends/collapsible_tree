@@ -195,7 +195,7 @@ button {
                 .attr("x", function(d) {
 
                     if (d._children) {
-                        return 130;
+                        return 120;
                     } else if (d.name === "GOP Debate - CNBC") {
                         return -130;
                     } else {
@@ -494,8 +494,46 @@ button {
                     });
 
 
-                //append circle for illustrations               
-               nodeEnter.append("image")
+                //append circles for illustrations    
+                
+                if (currentSelect === "topfive") {
+
+                nodeEnter.append("image")
+                .attr("xlink:href","trump.png")
+                .attr("x",0)
+                .attr("y",- 40)
+                .attr("width", 80)
+                .attr("height",function(d){
+                    return d.name === "GOP Debate - CNBC" ? "" : 80;
+                })
+                .attr("transform", function(d) {
+                    return "translate(" + source.y + 30 + "," + 0 + ")";
+                })
+                .attr("dy", ".35em");
+
+                // append candidates' names 
+                nodeEnter.append("text")
+                    .attr("x", function(d) {
+
+                        if (d._children) {
+                            return 120;
+                        } else if (d.name === "GOP Debate - CNBC") {
+                            return -130;
+                        } else {
+                            return 30;
+                        }
+                    })
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "start")
+                    .text(function(d) {
+                        return d.name;
+                    })
+                    .style("fill", "#c3574a");
+
+
+                } else if (currentSelect === "allcandidates") {
+                
+                nodeEnter.append("image")
                 .attr("xlink:href","trump.png")
                 .attr("x",0)
                 .attr("y",-25)
@@ -507,21 +545,6 @@ button {
                     return "translate(" + source.y + 30 + "," + 0 + ")";
                 })
                 .attr("dy", ".35em");
-
-
-                // append candidates' rank
-                nodeEnter.append("text")
-                    .attr("x", 0)
-                    .attr("dy", ".35em")
-                    .attr("text-anchor", "middle")
-                    .text(function(d) {
-                        return d.rank;
-                    })
-                    .style("opacity", 1)
-                    .style("fill", function(d) {
-                        return d._children ? "#fff" : "#c3574a";
-                    });
-
 
                 // append candidates' names 
                 nodeEnter.append("text")
@@ -541,6 +564,26 @@ button {
                         return d.name;
                     })
                     .style("fill", "#c3574a");
+
+
+                }
+
+               
+
+
+                // append candidates' rank
+                nodeEnter.append("text")
+                    .attr("x", 0)
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text(function(d) {
+                        return d.rank;
+                    })
+                    .style("opacity", 1)
+                    .style("fill", function(d) {
+                        return d._children ? "#fff" : "#c3574a";
+                    });
+
 
 
                 // Transition nodes to their new position.
