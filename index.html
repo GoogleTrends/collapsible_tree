@@ -44,70 +44,380 @@ button {
             <button type="button" id="allcandidates" class="btn switch" value="candidates">All Candidates</button>
         </div>
     </div>
-
-        <svg id="mySvg" width="0" height="0">
+   <!--  <svg id="mySvg" width="0" height="0">
         <defs id="mdef">
+            <image x="-1" y="-1" width="48" height="48" xlink:href="trump.png"></image>
             <pattern id="image" x="0" y="0" height="48" width="48">
                 <image x="-1" y="-1" width="48" height="48" xlink:href="trump.png"></image>
             </pattern>
         </defs>
-        </svg>
+    </svg>
+     -->
+    <div id="graphic"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="topfive.js"></script>
+    <script src="allcandidates.js"></script>
+    <script>
+    function drawGraphic() {
+
+        var screenHeight = $(window).height();
 
 
-        <div id="graphic"></div>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-        <script src="topfive.js"></script>
-        <script src="allcandidates.js"></script>
+        var margin = {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 180
+            },
+            width = 1200 - margin.left - margin.right,
+            height = screenHeight - margin.top - margin.bottom - 50;
 
-        <script>
-        function drawGraphic() {
+        var i = 0,
+            duration = 750,
+            root;
 
-            var screenHeight = $(window).height();
+        var tree = d3.layout.tree()
+            .separation(function(a, b) {
+                return (a.children == b.children ? 1 : 1.5);
+            })
+            .size([height, width]);
+
+        var diagonal = d3.svg.diagonal()
+            .projection(function(d) {
+                return [d.y, d.x];
+            });
+
+        var svg = d3.select("#graphic").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            // .call(responsivefy)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
+        // The children node expanding only works with .js data file!
+        root = topfive;
+        root.x0 = height / 2;
+        root.y0 = 0;
+
+        //switch between top 5 and all candidates
+        function collapse(d) {
+            if (d.children) {
+                d._children = d.children;
+                d._children.forEach(collapse);
+                d.children = null;
+            }
+        }
+        root.children.forEach(collapse);
+        update(root);
 
 
-            var margin = {
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 180
-                },
-                width = 1200 - margin.left - margin.right,
-                height = screenHeight - margin.top - margin.bottom - 50;
+        d3.select(self.frameElement).style("height", "800px");
 
-            var i = 0,
-                duration = 750,
-                root;
+        function update(source) {
 
-            var tree = d3.layout.tree()
-                .separation(function(a, b) {
-                    return (a.children == b.children ? 1 : 1.5);
-                })
-                .size([height, width]);
+            // Compute the new tree layout.
+            var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
 
-            var diagonal = d3.svg.diagonal()
-                .projection(function(d) {
-                    return [d.y, d.x];
+            // Normalize for fixed-depth.
+            nodes.forEach(function(d) {
+                d.y = d.depth * 300;
+            });
+
+            // Update the nodes…
+            var node = svg.selectAll("g.node")
+                .data(nodes, function(d) {
+                    return d.id || (d.id = ++i);
                 });
 
-            var svg = d3.select("#graphic").append("svg")
-                .attr("width", width + margin.right + margin.left)
-                .attr("height", height + margin.top + margin.bottom)
-                // .call(responsivefy)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
-            // The children node expanding only works with .js data file!
+            // Enter any new nodes at the parent's previous position.
+            var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function(d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on("click", click);
+
+            // Set "pointer-events" to all nodes, except for the root node 
+            nodeEnter.attr('pointer-events', 'all')
+                .filter(function(d) {
+                    return d.name === "GOP Debate - CNBC";
+                })
+                .attr('pointer-events', 'none');
 
 
-            root = topfive;
+            //append circles
+            nodeEnter.append("circle")
+                .attr("r", function(d) {
+                    return Math.sqrt(d.size) * 1;
+                })
+                .style("fill", function(d) {
+                    return d._children ? "#c3574a" : "#fff";
+                })
+                .style("stroke", function(d) {
+                    return d.name === "GOP Debate - CNBC" ? "#fff" : "#c3574a";
+                });
+
+
+            //append circle for illustrations
+            nodeEnter.append("image")
+                .attr("xlink:href","trump.png")
+                .attr("x",0)
+                .attr("y",-40)
+                .attr("width",function(d){
+                    return d.name === "GOP Debate - CNBC" ? "" : 80;
+                })
+                .attr("height", 80)
+                .attr("transform", function(d) {
+                    return "translate(" + source.y + 30 + "," + 0 + ")";
+                })
+                .attr("dy", ".35em");
+
+            // append candidates' rank
+            nodeEnter.append("text")
+                .attr("x", 0)
+                .attr("dy", ".35em")
+                .attr("text-anchor", "middle")
+                .text(function(d) {
+                    return d.rank;
+                })
+                .style("fill-opacity", 0)
+                .style("fill", function(d) {
+                    return d._children ? "#fff" : "#c3574a";
+                });
+
+
+            // append candidates' names 
+            nodeEnter.append("text")
+                .attr("x", function(d) {
+
+                    if (d._children) {
+                        return 130;
+                    } else if (d.name === "GOP Debate - CNBC") {
+                        return -130;
+                    } else {
+                        return 20;
+                    }
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", "start")
+                .text(function(d) {
+                    return d.name;
+                })
+                .style("fill", "#C53929");
+
+
+
+
+
+
+            // Transition nodes to their new position.
+            var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+            nodeUpdate.select("circle")
+                .attr("r", function(d) {
+                    return Math.sqrt(d.size) * 1.2;
+                })
+                .style("fill", function(d) {
+                    return d._children ? "#c3574a" : "#fff";
+                });
+
+            nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+            // Transition exiting nodes to the parent's new position.
+            var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+            nodeExit.select("circle")
+                .attr("r", 20);
+
+            nodeExit.select("text")
+                .style("opacity", 0);
+
+            // Update the links…
+            var link = svg.selectAll("path.link")
+                .data(links, function(d) {
+                    return d.target.id;
+                });
+
+
+            // Enter any new links at the parent's previous position.
+            link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function(d) {
+                    var o = {
+                        x: source.x0,
+                        y: source.y0
+                    };
+                    return diagonal({
+                        source: o,
+                        target: o
+                    });
+                })
+                .style("stroke-dasharray", ("3, 3"));
+
+            // Transition links to their new position.
+            link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+            // Transition exiting nodes to the parent's new position.
+            link.exit().transition()
+                .duration(duration)
+                .attr("d", function(d) {
+                    var o = {
+                        x: source.x,
+                        y: source.y
+                    };
+                    return diagonal({
+                        source: o,
+                        target: o
+                    });
+                })
+                .remove();
+
+            // Stash the old positions for transition.
+            nodes.forEach(function(d) {
+                d.x0 = d.x;
+                d.y0 = d.y;
+            });
+
+
+            // the click function 
+
+
+            function click(d) {
+
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                } else {
+                    d.children = d._children;
+                    d._children = null;
+
+                }
+
+                // If the node has a parent, then collapse its child nodes, except for this clicked node.
+
+                if (d.parent) {
+                    d.parent.children.forEach(function(element) {
+                        if (d !== element) {
+                            collapse(element);
+                        }
+                    });
+
+                };
+
+                update(d);
+
+                if (d.children) {
+
+
+                    var textSelect = d.name;
+
+                    function selected() {
+
+
+                        nodeEnter.selectAll("text")
+                            .attr('pointer-events', 'cursor')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 1);
+
+                        nodeEnter.selectAll("circle")
+                            .attr('pointer-events', 'cursor')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 1);
+
+
+                        nodeEnter.selectAll("text")
+                            .filter(function(d) {
+                                return d.name === "GOP Debate - CNBC";
+                            })
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
+
+                        nodeEnter.selectAll("text")
+                            .filter(function(d) {
+                                return d.name === textSelect;
+                            })
+                            .attr('pointer-events', 'none')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
+
+                        nodeEnter.selectAll("circle")
+                            .filter(function(d) {
+                                return d.name === textSelect;
+                            })
+                            .attr('pointer-events', 'none')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
+
+
+                        $("#newParent").remove();
+                        var newParent = svg.append("text")
+                            .attr("y", root.x)
+                            .attr("x", root.y - 80)
+                            .attr("id", "newParent")
+                            .attr("dy", ".35em")
+                            .style("fill", "#565555")
+                            .style("font-size", "20px")
+                            .attr("text-anchor", "middle")
+                            .transition()
+                            .delay(500)
+                            .duration(250)
+                            .text(d.name);
+
+
+                    };
+
+                    selected();
+                };
+
+
+            }
+
+
+
+        }
+
+        // *********************************************************************************************************************************************************** the button click function ************************************************************************* //
+
+        $(".btn").on("click", function() {
+            $(".btn").removeClass("active");
+            $(this).addClass("active");
+            var currentSelect = $(this).attr("id");
+
+            svg.selectAll(".node").remove();
+            svg.selectAll(".link").remove();
+            svg.select("text").remove();
+
+            root = [];
+
+            if (currentSelect === "topfive") {
+                root = topfive;
+            } else if (currentSelect === "allcandidates") {
+                root = allcandidates;
+            }
+
             root.x0 = height / 2;
             root.y0 = 0;
-
-            //switch between top 5 and all candidates
-
-
 
             function collapse(d) {
                 if (d.children) {
@@ -157,7 +467,6 @@ button {
 
 
                 //append circles
-
                 nodeEnter.append("circle")
                     .attr("r", function(d) {
                         return Math.sqrt(d.size) * 1;
@@ -170,355 +479,22 @@ button {
                     });
 
 
-                //append circle for illustrations
-
-                nodeEnter.append("circle")
-                    .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 2.2;
-                    })
-                    .attr("transform", function(d) {
-                        return "translate(" + source.y + 55 + "," + 0 + ")";
-                    })
-                    .attr("dy", ".35em")
-                    .style("fill", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "none" : "url(#image)";
-                    })
-                    .style("stroke", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "none" : "#c3574a";
-                    });
+                //append circle for illustrations               
+               nodeEnter.append("image")
+                .attr("xlink:href","trump.png")
+                .attr("x",0)
+                .attr("y",-25)
+                .attr("width", 50)
+                .attr("height",function(d){
+                    return d.name === "GOP Debate - CNBC" ? "" : 50;
+                })
+                .attr("transform", function(d) {
+                    return "translate(" + source.y + 30 + "," + 0 + ")";
+                })
+                .attr("dy", ".35em");
 
 
                 // append candidates' rank
-
-                nodeEnter.append("text")
-                    .attr("x", 0)
-                    .attr("dy", ".35em")
-                    .attr("text-anchor", "middle")
-                    .text(function(d) {
-                        return d.rank;
-                    })
-                    .style("fill-opacity", 0)
-                    .style("fill", function(d) {
-                        return d._children ? "#fff" : "#c3574a";
-                    });
-
-
-                // append candidates' names 
-
-                nodeEnter.append("text")
-                    .attr("x", function(d) {
-
-                        if (d._children) {
-                            return 130;
-                        } else if (d.name === "GOP Debate - CNBC") {
-                            return -130;
-                        } else {
-                            return 20;
-                        }
-                        // return d._children ?  100 : 35 ;
-                    })
-                    .attr("dy", ".35em")
-                    .attr("text-anchor", "start")
-                    .text(function(d) {
-                        return d.name;
-                    })
-                    .style("fill", "#C53929");
-
-
-
-
-
-
-                // Transition nodes to their new position.
-                var nodeUpdate = node.transition()
-                    .duration(duration)
-                    .attr("transform", function(d) {
-                        return "translate(" + d.y + "," + d.x + ")";
-                    });
-
-                nodeUpdate.select("circle")
-                    .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 1.2;
-                    })
-                    .style("fill", function(d) {
-                        return d._children ? "#c3574a" : "#fff";
-                    });
-
-                nodeUpdate.select("text")
-                    .style("fill-opacity", 1);
-
-                // Transition exiting nodes to the parent's new position.
-                var nodeExit = node.exit().transition()
-                    .duration(duration)
-                    .attr("transform", function(d) {
-                        return "translate(" + source.y + "," + source.x + ")";
-                    })
-                    .remove();
-
-                nodeExit.select("circle")
-                    .attr("r", 20);
-
-                nodeExit.select("text")
-                    .style("opacity", 0);
-
-                // Update the links…
-                var link = svg.selectAll("path.link")
-                    .data(links, function(d) {
-                        return d.target.id;
-                    });
-
-
-                // Enter any new links at the parent's previous position.
-                link.enter().insert("path", "g")
-                    .attr("class", "link")
-                    .attr("d", function(d) {
-                        var o = {
-                            x: source.x0,
-                            y: source.y0
-                        };
-                        return diagonal({
-                            source: o,
-                            target: o
-                        });
-                    })
-                    .style("stroke-dasharray", ("3, 3"));
-
-                // Transition links to their new position.
-                link.transition()
-                    .duration(duration)
-                    .attr("d", diagonal);
-
-                // Transition exiting nodes to the parent's new position.
-                link.exit().transition()
-                    .duration(duration)
-                    .attr("d", function(d) {
-                        var o = {
-                            x: source.x,
-                            y: source.y
-                        };
-                        return diagonal({
-                            source: o,
-                            target: o
-                        });
-                    })
-                    .remove();
-
-                // Stash the old positions for transition.
-                nodes.forEach(function(d) {
-                    d.x0 = d.x;
-                    d.y0 = d.y;
-                });
-
-
-                // the click function 
-
-
-                function click(d) {
-
-                    if (d.children) {
-                        d._children = d.children;
-                        d.children = null;
-                    } else {
-                        d.children = d._children;
-                        d._children = null;
-
-                    }
-
-                    // If the node has a parent, then collapse its child nodes
-                    // except for this clicked node.
-
-                    if (d.parent) {
-                        d.parent.children.forEach(function(element) {
-                            if (d !== element) {
-                                collapse(element);
-                            }
-                        });
-
-                    };
-
-                    update(d);
-
-                    if (d.children) {
-
-
-                        var textSelect = d.name;
-
-                        function selected() {
-
-
-                            nodeEnter.selectAll("text")
-                                .attr('pointer-events', 'cursor')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 1);
-
-                            nodeEnter.selectAll("circle")
-                                .attr('pointer-events', 'cursor')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 1);
-
-
-                            nodeEnter.selectAll("text")
-                                .filter(function(d) {
-                                    return d.name === "GOP Debate - CNBC";
-                                })
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 0);
-
-                            nodeEnter.selectAll("text")
-                                .filter(function(d) {
-                                    return d.name === textSelect;
-                                })
-                                .attr('pointer-events', 'none')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 0);
-
-                            nodeEnter.selectAll("circle")
-                                .filter(function(d) {
-                                    return d.name === textSelect;
-                                })
-                                .attr('pointer-events', 'none')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 0);
-
-
-                            $("#newParent").remove();
-
-                            // d.parent.name = d.name; 
-
-                            var newParent = svg.append("text")
-                                .attr("y", root.x)
-                                .attr("x", root.y - 80)
-                                .attr("id", "newParent")
-                                .attr("dy", ".35em")
-                                .style("fill", "#565555")
-                                .style("font-size", "20px")
-                                .attr("text-anchor", "middle")
-                                .transition()
-                                .delay(500)
-                                .duration(250)
-                                .text(d.name);
-
-
-                        };
-
-                        selected();
-                    };
-
-
-                }
-
-
-
-            }
-
-            // *********************************************************************************************************************************************************** the button click function ************************************************************************* //
-
-            $(".btn").on("click", function() {
-                $(".btn").removeClass("active");
-                $(this).addClass("active");
-                var currentSelect = $(this).attr("id");
-
-                svg.selectAll(".node").remove();
-                svg.selectAll(".link").remove();
-                svg.select("text").remove();
-
-                root = [];
-
-                if(currentSelect === "topfive"){
-                    root = topfive;
-                } else if (currentSelect === "allcandidates"){
-                    root = allcandidates;
-                }
-
-                root.x0 = height / 2;
-                root.y0 = 0;
-
-                function collapse(d) {
-                if (d.children) {
-                    d._children = d.children;
-                    d._children.forEach(collapse);
-                    d.children = null;
-                }
-            }
-            root.children.forEach(collapse);
-            update(root);
-
-
-            d3.select(self.frameElement).style("height", "800px");
-
-            function update(source) {
-
-                // Compute the new tree layout.
-                var nodes = tree.nodes(root).reverse(),
-                    links = tree.links(nodes);
-
-                // Normalize for fixed-depth.
-                nodes.forEach(function(d) {
-                    d.y = d.depth * 300;
-                });
-
-                // Update the nodes…
-                var node = svg.selectAll("g.node")
-                    .data(nodes, function(d) {
-                        return d.id || (d.id = ++i);
-                    });
-
-
-                // Enter any new nodes at the parent's previous position.
-                var nodeEnter = node.enter().append("g")
-                    .attr("class", "node")
-                    .attr("transform", function(d) {
-                        return "translate(" + source.y0 + "," + source.x0 + ")";
-                    })
-                    .on("click", click);
-
-                // Set "pointer-events" to all nodes, except for the root node 
-                nodeEnter.attr('pointer-events', 'all')
-                    .filter(function(d) {
-                        return d.name === "GOP Debate - CNBC";
-                    })
-                    .attr('pointer-events', 'none');
-
-
-                //append circles
-
-                nodeEnter.append("circle")
-                    .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 1;
-                    })
-                    .style("fill", function(d) {
-                        return d._children ? "#c3574a" : "#fff";
-                    })
-                    .style("stroke", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "#fff" : "#c3574a";
-                    });
-
-
-                //append circle for illustrations
-
-                nodeEnter.append("circle")
-                    .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 2.2;
-                    })
-                    .attr("transform", function(d) {
-                        return "translate(" + source.y + 55 + "," + 0 + ")";
-                    })
-                    .attr("dy", ".35em")
-                    .style("fill", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "none" : "url(#image)";
-                    })
-                    .style("stroke", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "none" : "#c3574a";
-                    });
-
-
-                // append candidates' rank
-
                 nodeEnter.append("text")
                     .attr("x", 0)
                     .attr("dy", ".35em")
@@ -533,7 +509,6 @@ button {
 
 
                 // append candidates' names 
-
                 nodeEnter.append("text")
                     .attr("x", function(d) {
 
@@ -544,7 +519,6 @@ button {
                         } else {
                             return 20;
                         }
-                        // return d._children ?  100 : 35 ;
                     })
                     .attr("dy", ".35em")
                     .attr("text-anchor", "start")
@@ -552,10 +526,6 @@ button {
                         return d.name;
                     })
                     .style("fill", "#c3574a");
-
-
-
-
 
 
                 // Transition nodes to their new position.
@@ -640,8 +610,6 @@ button {
 
 
                 // the click function 
-
-
                 function click(d) {
 
                     if (d.children) {
@@ -653,9 +621,7 @@ button {
 
                     }
 
-                    // If the node has a parent, then collapse its child nodes
-                    // except for this clicked node.
-
+                    // If the node has a parent, then collapse its child nodes, except for this clicked node.
                     if (d.parent) {
                         d.parent.children.forEach(function(element) {
                             if (d !== element) {
@@ -731,28 +697,18 @@ button {
                                 .delay(500)
                                 .duration(250)
                                 .text(d.name);
-
-
                         };
-
                         selected();
                     };
-
-
                 }
-
-
 
             }
 
+        });
 
 
-
-                });
-
-
-        }
-        </script>
+    }
+    </script>
 </body>
 <script>
 drawGraphic()
