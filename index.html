@@ -44,12 +44,16 @@ button {
             <button type="button" id="allcandidates" class="btn switch" value="candidates">All Candidates</button>
         </div>
     </div>
-    <svg id="mySvg" width="0" height="0">
+
+        <svg id="mySvg" width="0" height="0">
         <defs id="mdef">
-            <pattern id="image" x="0" y="0" height="45" width="45">
-                <image x="0" y="0" width="45" height="45" xlink:href="dummy_pic.jpg"></image>
+            <pattern id="image" x="0" y="0" height="48" width="48">
+                <image x="-1" y="-1" width="48" height="48" xlink:href="trump.png"></image>
             </pattern>
         </defs>
+        </svg>
+
+
         <div id="graphic"></div>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
@@ -96,8 +100,6 @@ button {
             // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
             // The children node expanding only works with .js data file!
 
-
-            
 
             root = topfive;
             root.x0 = height / 2;
