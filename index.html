@@ -342,6 +342,12 @@ button {
                             .duration(500)
                             .style("opacity", 1);
 
+                        nodeEnter.selectAll("image")
+                            .attr('pointer-events', 'cursor')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 1);
+
 
                         nodeEnter.selectAll("text")
                             .filter(function(d) {
@@ -352,6 +358,15 @@ button {
                             .style("opacity", 0);
 
                         nodeEnter.selectAll("text")
+                            .filter(function(d) {
+                                return d.name === textSelect;
+                            })
+                            .attr('pointer-events', 'none')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
+
+                        nodeEnter.selectAll("image")
                             .filter(function(d) {
                                 return d.name === textSelect;
                             })
@@ -642,34 +657,49 @@ button {
 
 
                             nodeEnter.selectAll("text")
-                                .attr('pointer-events', 'cursor')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 1);
+                            .attr('pointer-events', 'cursor')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 1);
 
-                            nodeEnter.selectAll("circle")
-                                .attr('pointer-events', 'cursor')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 1);
+                        nodeEnter.selectAll("circle")
+                            .attr('pointer-events', 'cursor')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 1);
+
+                        nodeEnter.selectAll("image")
+                            .attr('pointer-events', 'cursor')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 1);
 
 
-                            nodeEnter.selectAll("text")
-                                .filter(function(d) {
-                                    return d.name === "GOP Debate - CNBC";
-                                })
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 0);
+                        nodeEnter.selectAll("text")
+                            .filter(function(d) {
+                                return d.name === "GOP Debate - CNBC";
+                            })
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
 
-                            nodeEnter.selectAll("text")
-                                .filter(function(d) {
-                                    return d.name === textSelect;
-                                })
-                                .attr('pointer-events', 'none')
-                                .transition()
-                                .duration(500)
-                                .style("opacity", 0);
+                        nodeEnter.selectAll("text")
+                            .filter(function(d) {
+                                return d.name === textSelect;
+                            })
+                            .attr('pointer-events', 'none')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
+
+                        nodeEnter.selectAll("image")
+                            .filter(function(d) {
+                                return d.name === textSelect;
+                            })
+                            .attr('pointer-events', 'none')
+                            .transition()
+                            .duration(500)
+                            .style("opacity", 0);
 
                             nodeEnter.selectAll("circle")
                                 .filter(function(d) {
