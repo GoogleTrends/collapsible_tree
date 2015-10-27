@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>CNBC Republican Debate</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+.node circle {
+    fill: #000;
+    stroke: #c3574a;
+    stroke-width: 1.5px;
+}
+
+.node text {
+    font: 14px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+</style>
+
+<body>
+    <div id="graphic"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="candidates.js"></script>
+    <script>
+    function drawGraphic() {
+
+        var screenHeight = $(window).height();
+
+
+        var margin = {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 180
+            },
+            width = 960 - margin.left - margin.right,
+            height = screenHeight - margin.top - margin.bottom;
+
+        var i = 0,
+            duration = 750,
+            root;
+
+        var tree = d3.layout.tree()
+            .separation(function(a, b) {
+                return (a.children == b.children ? 1 : 1.5);
+            })
+            .size([height, width]);
+
+        var diagonal = d3.svg.diagonal()
+            .projection(function(d) {
+                return [d.y, d.x];
+            });
+
+        var svg = d3.select("#graphic").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            // .call(responsivefy)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
+        // The children node expanding only works with .js data file!
+
+        root = candidates;
+        root.x0 = height / 2;
+        root.y0 = 0;
+
+        function collapse(d) {
+            if (d.children) {
+                d._children = d.children;
+                d._children.forEach(collapse);
+                d.children = null;
+            }
+        }
+        root.children.forEach(collapse);
+        update(root);
+
+
+        d3.select(self.frameElement).style("height", "800px");
+
+        function update(source) {
+
+            // Compute the new tree layout.
+            var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+            // Normalize for fixed-depth.
+            nodes.forEach(function(d) {
+                d.y = d.depth * 300;
+            });
+
+            // Update the nodes…
+            var node = svg.selectAll("g.node")
+                .data(nodes, function(d) {
+                    return d.id || (d.id = ++i);
+                });
+
+
+            // Enter any new nodes at the parent's previous position.
+            var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function(d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on("click", click);
+
+            // Set "pointer-events" to all nodes, except for the root node 
+            nodeEnter.attr('pointer-events', 'all')
+                .filter(function(d) {
+                    return d.name === "GOP Debate - CNBC";
+                })
+                .attr('pointer-events', 'none');
+
+
+            nodeEnter.append("circle")
+                .attr("r", function(d) {
+                    return Math.sqrt(d.size) * 2;
+                })
+                .style("fill", function(d) {
+                    return d._children ? "#c3574a" : "#fff";
+                })
+                .style("stroke", function(d) {
+                    return d.name === "GOP Debate - CNBC" ? "#fff" : "#c3574a";
+                });
+
+            nodeEnter.append("text")
+                .attr("x", function(d) {
+                    return d.name === "GOP Debate - CNBC" ? -130 : 35;
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function(d) {
+                    return d.children || d._children ? "start" : "start";
+                })
+                .text(function(d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 0)
+                .style("fill", "#C53929");
+
+
+            // Transition nodes to their new position.
+            var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+            nodeUpdate.select("circle")
+                .attr("r", function(d) {
+                    return Math.sqrt(d.size) * 2.8;
+                })
+                .style("fill", function(d) {
+                    return d._children ? "#c3574a" : "#fff";
+                });
+
+            nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+            // Transition exiting nodes to the parent's new position.
+            var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+            nodeExit.select("circle")
+                .attr("r", 20);
+
+            nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+            // Update the links…
+            var link = svg.selectAll("path.link")
+                .data(links, function(d) {
+                    return d.target.id;
+                });
+
+
+            // Enter any new links at the parent's previous position.
+            link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function(d) {
+                    var o = {
+                        x: source.x0,
+                        y: source.y0
+                    };
+                    return diagonal({
+                        source: o,
+                        target: o
+                    });
+                })
+                .style("stroke-dasharray", ("3, 3"));
+
+            // Transition links to their new position.
+            link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+            // Transition exiting nodes to the parent's new position.
+            link.exit().transition()
+                .duration(duration)
+                .attr("d", function(d) {
+                    var o = {
+                        x: source.x,
+                        y: source.y
+                    };
+                    return diagonal({
+                        source: o,
+                        target: o
+                    });
+                })
+                .remove();
+
+            // Stash the old positions for transition.
+            nodes.forEach(function(d) {
+                d.x0 = d.x;
+                d.y0 = d.y;
+            });
+
+
+            function click(d) {
+
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+
+            }
+
+            // If the node has a parent, then collapse its child nodes
+            // except for this clicked node.
+
+            if (d.parent) {
+                d.parent.children.forEach(function(element) {
+                    if (d !== element) {
+                        collapse(element);
+                    }
+                });
+
+            };
+
+            update(d);
+
+            if(d.children){ 
+
+
+            var textSelect = d.name;
+
+            console.log(textSelect)
+           
+                function selected() {
+
+
+                    nodeEnter.selectAll("text")
+                    .attr('pointer-events', 'cursor')
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 1);
+
+                    nodeEnter.selectAll("circle")
+                    .attr('pointer-events', 'cursor')
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 1);
+
+
+                    nodeEnter.selectAll("text")
+                    .filter(function(d){
+                        return d.name === "GOP Debate - CNBC";
+                    })
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 0);
+
+                    nodeEnter.selectAll("text")
+                    .filter(function(d){
+                        return d.name === textSelect;
+                    })
+                    .attr('pointer-events', 'none')
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 0);
+
+                    nodeEnter.selectAll("circle")
+                    .filter(function(d){
+                        return d.name === textSelect;
+                    })
+                    .attr('pointer-events', 'none')
+                    .transition()
+                    .duration(500)
+                    .style("opacity", 0);
+
+
+                   $("#newParent").remove();
+                    
+                    // d.parent.name = d.name; 
+
+                    var newParent = svg.append("text")
+                        .attr("y", root.x)
+                        .attr("x", root.y - 80)
+                        .attr("id", "newParent")
+                        .attr("dy", ".35em")
+                        .style("fill", "#565555")
+                        .style("font-size","20px")
+                        .attr("text-anchor", "middle")
+                        .transition()
+                        .delay(500)
+                        .duration(250)
+                        .text(d.name);
+                              
+               
+            };
+
+            selected();
+        };
+
+
+
+
+        }
+
+        }
+
+        // Toggle children on click.
+        
+        // Add the circle legend 
+
+        var legendCircle = svg.append("circle")
+            .attr("cx", -100)
+            .attr("cy", height - 50)
+            .attr("r", 28)
+            .style("fill", "none")
+            .style("stroke", "grey")
+            .style("stroke-width", 1.5)
+            .style("stroke-dasharray", ("3,3"));
+
+        var legendCircle = svg.append("circle")
+            .attr("cx", -100)
+            .attr("cy", height - 42)
+            .attr("r", function() {
+                return Math.sqrt(392);
+            })
+            .style("fill", "none")
+            .style("stroke", "grey")
+            .style("stroke-width", 1.5)
+            .style("stroke-dasharray", ("3,3"));
+
+        var legendCircle = svg.append("circle")
+            .attr("cx", -100)
+            .attr("cy", height - 37)
+            .attr("r", function() {
+                return Math.sqrt(196);
+            })
+            .style("fill", "none")
+            .style("stroke", "grey")
+            .style("stroke-width", 1.5)
+            .style("stroke-dasharray", ("3,3"));
+
+        var legend = svg.append("text")
+            .text("Google Search Index")
+            .attr("x", -100)
+            .attr("y", height - 8)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "grey");
+
+
+        var legend100 = svg.append("text")
+            .text("100")
+            .attr("x", -100)
+            .attr("y", height - 80)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "grey");
+
+        var legend50 = svg.append("text")
+            .text("50")
+            .attr("x", -100)
+            .attr("y", height - 63)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "grey");
+
+        var legend25 = svg.append("text")
+            .text("25")
+            .attr("x", -100)
+            .attr("y", height - 50)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "grey");
+
+
+    }
+    </script>
+</body>
+<script>
+drawGraphic()
+</script>
