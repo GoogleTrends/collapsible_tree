@@ -47,7 +47,7 @@ button {
     <svg id="mySvg" width="0" height="0">
         <defs id="mdef">
             <pattern id="image" x="0" y="0" height="45" width="45">
-                <image x="0" y="0" width="45" height="45" xlink:href="dummy_pic.png"></image>
+                <image x="0" y="0" width="45" height="45" xlink:href="dummy_pic.jpg"></image>
             </pattern>
         </defs>
         <div id="graphic"></div>
@@ -207,7 +207,7 @@ button {
                     .attr("x", function(d) {
 
                         if (d._children) {
-                            return 100;
+                            return 130;
                         } else if (d.name === "GOP Debate - CNBC") {
                             return -130;
                         } else {
@@ -414,6 +414,8 @@ button {
 
             }
 
+            // *********************************************************************************************************************************************************** the button click function ************************************************************************* //
+
             $(".btn").on("click", function() {
                 $(".btn").removeClass("active");
                 $(this).addClass("active");
@@ -424,7 +426,13 @@ button {
                 svg.select("text").remove();
 
                 root = [];
-                root = allcandidates;
+
+                if(currentSelect === "topfive"){
+                    root = topfive;
+                } else if (currentSelect === "allcandidates"){
+                    root = allcandidates;
+                }
+
                 root.x0 = height / 2;
                 root.y0 = 0;
 
@@ -516,7 +524,7 @@ button {
                     .text(function(d) {
                         return d.rank;
                     })
-                    .style("fill-opacity", 0)
+                    .style("opacity", 1)
                     .style("fill", function(d) {
                         return d._children ? "#fff" : "#c3574a";
                     });
@@ -541,7 +549,7 @@ button {
                     .text(function(d) {
                         return d.name;
                     })
-                    .style("fill", "#C53929");
+                    .style("fill", "#c3574a");
 
 
 
@@ -563,7 +571,7 @@ button {
                         return d._children ? "#c3574a" : "#fff";
                     });
 
-                nodeUpdate.select("text")
+                nodeUpdate.selectAll("text")
                     .style("fill-opacity", 1);
 
                 // Transition exiting nodes to the parent's new position.
