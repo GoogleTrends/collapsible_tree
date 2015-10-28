@@ -218,7 +218,7 @@ button {
                     .style("fill", "#C53929")
                     .style("font-size", function(d){
                         if (d.children) {
-                            return mobileScreen? "20px":"18px" ;
+                            return mobileScreen? "20px":"18px";
                         } else {
                             return mobileScreen? "18px": "14px";
                         }
@@ -454,30 +454,30 @@ button {
                     })
                     .attr("x", function(d) {
                         if (d.children) {
-                            return mobileScreen? -240: -170;
+                            return mobileScreen? -240: -190;
                         } else {
                             return 0;
                         }
                     })
                     .attr("y", function(d) {
                         if (d.children) {
-                            return mobileScreen? -90:-60;
+                            return mobileScreen? -90:-70;
                         } else {
-                            return mobileScreen? -110:-40;
+                            return mobileScreen? -110:-70;
                         }
                     })
                     .attr("width", function(d) {
                         if (d.children) {
-                            return mobileScreen? 180:120;
+                            return mobileScreen? 180:140;
                         } else {
-                            return mobileScreen? 220:80;
+                            return mobileScreen? 220:140;
                         }
                     })
                     .attr("height", function(d) {
                          if (d.children) {
-                            return mobileScreen? 180:120;
+                            return mobileScreen? 180:140;
                         } else {
-                            return mobileScreen? 220 :80;
+                            return mobileScreen? 220 :140;
                         }
                     })
                     .attr("transform", function(d) {
@@ -506,14 +506,14 @@ button {
                     .attr("x", function(d) {
 
                         if (d.children) {
-                            return mobileScreen? -120:-80;
+                            return mobileScreen? -120:-95;
                         } else {
-                            return mobileScreen? 270:120;
+                            return mobileScreen? 270:180;
                         }
                     })
                     .attr("dy", function(d) {
                         if (d.children) {
-                            return mobileScreen? "4.5em":"4.5em";
+                            return mobileScreen? "4.5em":"5em";
                         } else {
                             return ".35em";
                         }
@@ -533,7 +533,7 @@ button {
                         if (d.children) {
                             return  mobileScreen? "30px":"18px";
                         } else {
-                            return mobileScreen? "24px":"14px";
+                            return mobileScreen? "24px":"18px";
                         }
                     });
 
