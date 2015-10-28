@@ -52,6 +52,8 @@ button {
     function drawGraphic() {
 
         var screenHeight = $(window).height();
+        var screenWidth = $(window).width();
+        mobileScreen = (screenWidth > 400 ? false:true)
 
 
         var margin = {
@@ -115,7 +117,7 @@ button {
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
-                    d.y = d.depth * 300;
+                    d.y = mobileScreen? d.depth* 400: d.depth * 300;
                 });
 
                 // Update the nodes…
@@ -160,11 +162,23 @@ button {
                         return d.pic;
                     })
                     .attr("x", 0)
-                    .attr("y", -25)
-                    .attr("width", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "" : 50;
+                    .attr("y", function(d) {
+                        return mobileScreen? -35: -25;
                     })
-                    .attr("height", 50)
+                    .attr("width", function(d) {
+                        if (d.children) {
+                            return 0 ;
+                        } else {
+                            return mobileScreen? 70: 50;
+                        }
+                    })
+                    .attr("height", function(d) {
+                        if (d.children) {
+                            return 0 ;
+                        } else {
+                            return mobileScreen? 60: 50;
+                        }
+                    })
                     .attr("transform", function(d) {
                         return "translate(" + source.y + 30 + "," + 0 + ")";
                     })
@@ -181,6 +195,9 @@ button {
                     .style("fill-opacity", 0)
                     .style("fill", function(d) {
                         return d._children ? "#fff" : "#c3574a";
+                    })
+                    .style("font-size",function(d){
+                            return mobileScreen? "18px":"14px";
                     });
 
 
@@ -188,20 +205,24 @@ button {
                 nodeEnter.append("text")
                     .attr("x", function(d) {
                         if (d._children) {
-                            return 90;
-                        } else if (d.name === "GOP Debate - CNBC") {
-                            return -170;
+                            return mobileScreen? 110:90;
+                        } else {
+                            return mobileScreen? -200:-180;
                        };
                     })
-                    .attr("dy", ".35em")
+                    .attr("dy", ".25em")
                     .attr("text-anchor", "start")
                     .text(function(d) {
                         return d.name;
                     })
                     .style("fill", "#C53929")
                     .style("font-size", function(d){
-                        return d.children? "18px":"14px";
-                    });;
+                        if (d.children) {
+                            return mobileScreen? "20px":"18px" ;
+                        } else {
+                            return mobileScreen? "18px": "14px";
+                        }
+                    });
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
@@ -212,7 +233,7 @@ button {
 
                 nodeUpdate.select("circle")
                     .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 1.2;
+                        return mobileScreen? Math.sqrt(d.size) * 1.5 : Math.sqrt(d.size) * 1.2;
                     })
                     .style("fill", function(d) {
                         return d._children ? "#c3574a" : "#fff";
@@ -416,7 +437,7 @@ button {
                 //append circles
                 nodeEnter.append("circle")
                     .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 1;
+                        return mobileScreen? Math.sqrt(d.size) * 1.3 : Math.sqrt(d.size) * 1;
                     })
                     .style("fill", function(d) {
                         if (d.children) {
@@ -433,30 +454,30 @@ button {
                     })
                     .attr("x", function(d) {
                         if (d.children) {
-                            return -170;
+                            return mobileScreen? -220: -170;
                         } else {
                             return 0;
                         }
                     })
                     .attr("y", function(d) {
                         if (d.children) {
-                            return -60;
+                            return mobileScreen? -80:-60;
                         } else {
-                            return -40;
+                            return mobileScreen? -60:-40;
                         }
                     })
                     .attr("width", function(d) {
                         if (d.children) {
-                            return 120;
+                            return mobileScreen? 160:120;
                         } else {
-                            return 80;
+                            return mobileScreen? 120 : 80;
                         }
                     })
                     .attr("height", function(d) {
-                        if (d.children) {
-                            return 120;
+                         if (d.children) {
+                            return mobileScreen? 160:120;
                         } else {
-                            return 80;
+                            return mobileScreen? 120 : 80;
                         }
                     })
                     .attr("transform", function(d) {
@@ -474,6 +495,9 @@ button {
                     })
                     .style("fill", function(d) {
                         return d.children ? "#fff" : "#c3574a";
+                    })
+                    .style("font-size",function(d){
+                        return mobileScreen? "18px":"14px";
                     });
 
 
@@ -482,14 +506,14 @@ button {
                     .attr("x", function(d) {
 
                         if (d.children) {
-                            return -80;
+                            return mobileScreen? -110:-80;
                         } else {
-                            return 120;
+                            return mobileScreen? 165:120;
                         }
                     })
                     .attr("dy", function(d) {
                         if (d.children) {
-                            return "4.5em";
+                            return mobileScreen? "5.2em":"4.5em";
                         } else {
                             return ".35em";
                         }
@@ -507,9 +531,9 @@ button {
                     .style("fill", "#C53929")
                     .style("font-size", function(d) {
                         if (d.children) {
-                            return "18px";
+                            return  mobileScreen? "22px":"18px";
                         } else {
-                            return "14px";
+                            return mobileScreen? "18px":"14px";
                         }
                     });
 
@@ -522,7 +546,7 @@ button {
 
                 nodeUpdate.select("circle")
                     .attr("r", function(d) {
-                        return Math.sqrt(d.size) * 1.2;
+                        return mobileScreen? Math.sqrt(d.size) * 1.5: Math.sqrt(d.size) * 1.2;
                     })
                     .style("fill", function(d) {
                         return d.children ? "#c3574a" : "#fff";

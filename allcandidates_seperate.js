@@ -175,7 +175,7 @@ var jindal = {
    "children": [
     {"name": "Lindsey Graham", "rank": "1","size":100, "pic":"graham.png"},
     {"name": "Bobby Jindal", "rank": "2","size":100, "pic":"jindal.png"},
-    {"name": "Rick Santorum", "rank": "3","size":100, "pic":"trump.png"},
+    {"name": "Rick Santorum", "rank": "3","size":100, "pic":"santorum.png"},
     {"name": "Rand Paul", "rank": "4","size":100, "pic":"paul.png"},
     {"name": "John Kasich", "rank": "5","size":100, "pic":"kasich.png"}
    ]
