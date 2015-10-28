@@ -525,7 +525,7 @@ button {
                     })
                     .attr("dy", function(d) {
                         if (d.children) {
-                            return mobileScreen? "5em":"6em";
+                            return mobileScreen? height/12 + 20 + "px":"6em";
                         } else {
                             return ".35em";
                         }
