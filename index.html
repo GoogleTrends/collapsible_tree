@@ -60,19 +60,25 @@ button {
                 top: 20,
                 right: 20,
                 bottom: 20,
-                left: 220
-            },
-            width = 1200 - margin.left - margin.right,
-            height = screenHeight - margin.top - margin.bottom - 50;
+                left: mobileScreen? 155: 200,
+            };
+
+        if (mobileScreen){
+            var width = screenWidth;
+        } else {
+            var width = 1200 - margin.left - margin.right;
+        };
+
+        height = screenHeight - margin.top - margin.bottom - 50;
 
         var i = 0,
             duration = 750,
             root;
 
         var tree = d3.layout.tree()
-            .separation(function(a, b) {
-                return (a.children == b.children ? 1 : 1.5);
-            })
+            // .separation(function(a, b) {
+            //     return (a.children == b.children ? 1 : 1.5);
+            // })
             .size([height, width]);
 
         var diagonal = d3.svg.diagonal()
@@ -117,7 +123,7 @@ button {
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
-                    d.y = mobileScreen? d.depth* 400: d.depth * 300;
+                    d.y = mobileScreen? d.depth * 70: d.depth * 300;
                 });
 
                 // Update the nodes…
@@ -163,20 +169,20 @@ button {
                     })
                     .attr("x", 0)
                     .attr("y", function(d) {
-                        return mobileScreen? -35: -height/27;
+                        return mobileScreen? -height/27: -height/27;
                     })
                     .attr("width", function(d) {
                         if (d.children) {
                             return 0 ;
                         } else {
-                            return mobileScreen? 70: height/13.5;
+                            return mobileScreen? height/13.5: height/13.5;
                         }
                     })
                     .attr("height", function(d) {
                         if (d.children) {
                             return 0 ;
                         } else {
-                            return mobileScreen? 70: height/13.5;
+                            return mobileScreen? height/13.5: height/13.5;
                         }
                     })
                     .attr("transform", function(d) {
@@ -197,7 +203,7 @@ button {
                         return d._children ? "#fff" : "#c3574a";
                     })
                     .style("font-size",function(d){
-                            return mobileScreen? "18px":"14px";
+                            return mobileScreen? "12px":"14px";
                     });
 
 
@@ -206,9 +212,9 @@ button {
                     .attr("x",0)
                     .attr("x", function(d) {
                         if (d._children) {
-                            return mobileScreen? 110: source.y + 50 + height/13.5 ;
+                            return mobileScreen? source.y + 40 + height/13.5: source.y + 50 + height/13.5 ;
                         } else {
-                            return mobileScreen? -200:-180;
+                            return mobileScreen? -150:-180;
                        };
                     })
                     .attr("dy", ".25em")
@@ -219,9 +225,9 @@ button {
                     .style("fill", "#C53929")
                     .style("font-size", function(d){
                         if (d.children) {
-                            return mobileScreen? "20px":"18px" ;
+                            return mobileScreen? "14px":"18px" ;
                         } else {
-                            return mobileScreen? "18px": "14px";
+                            return mobileScreen? "14px": "14px";
                         }
                     });
                     // .attr("transform", function(d) {
@@ -421,7 +427,7 @@ button {
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
-                    d.y = d.depth * 300;
+                    d.y = mobileScreen? d.depth * 70: d.depth * 300;
                 });
 
                 // Update the nodes…
@@ -452,42 +458,44 @@ button {
                     });
 
                 //append circle for illustrations
+
                 nodeEnter.append("image")
                     .attr("xlink:href", function(d) {
                         return d.pic;
                     })
                     .attr("x", function(d) {
                         if (d.children) {
-                            return mobileScreen? -240: -170;
+                            return mobileScreen? -height/6 - 60: -170;
                         } else {
                             return 0;
                         }
                     })
                     .attr("y", function(d) {
                         if (d.children) {
-                            return mobileScreen? -90:-60;
+                            return mobileScreen? -height/12:-60;
                         } else {
-                            return mobileScreen? -110:-height/10;
+                            return mobileScreen? -height/10:-height/10;
                         }
                     })
                     .attr("width", function(d) {
                         if (d.children) {
-                            return mobileScreen? 180:120;
+                            return mobileScreen? height/6:120;
                         } else {
-                            return mobileScreen? 220:height/5;
+                            return height/5;
                         }
                     })
                     .attr("height", function(d) {
                          if (d.children) {
-                            return mobileScreen? 180:120;
+                            return mobileScreen? height/6:120;
                         } else {
-                            return mobileScreen? 220 :height/5;
+                            return height/5;
                         }
                     })
                     .attr("transform", function(d) {
                         return "translate(" + source.y + 30 + "," + 0 + ")";
                     })
                     .attr("dy", ".35em");
+
 
                 // append candidates' rank
                 nodeEnter.append("text")
@@ -501,7 +509,7 @@ button {
                         return d.children ? "#fff" : "#c3574a";
                     })
                     .style("font-size",function(d){
-                        return mobileScreen? "18px":"14px";
+                        return "14px";
                     });
 
 
@@ -510,14 +518,14 @@ button {
                     .attr("x", function(d) {
 
                         if (d.children) {
-                            return mobileScreen? -120:-80;
+                            return mobileScreen? -height/12 - 30 :-80;
                         } else {
-                            return mobileScreen? 270: source.y + 40 + height/5 ;
+                            return height/5 + 50;
                         }
                     })
                     .attr("dy", function(d) {
                         if (d.children) {
-                            return mobileScreen? "4.5em":"4.5em";
+                            return mobileScreen? "5em":"6em";
                         } else {
                             return ".35em";
                         }
@@ -535,12 +543,11 @@ button {
                     .style("fill", "#C53929")
                     .style("font-size", function(d) {
                         if (d.children) {
-                            return  mobileScreen? "30px":"18px";
+                            return  mobileScreen? "16px":"14px";
                         } else {
-                            return mobileScreen? "24px":"14px";
+                            return mobileScreen? "14px":"14px";
                         }
                     });
-
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
                     .duration(duration)
