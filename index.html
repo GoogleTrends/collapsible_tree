@@ -163,20 +163,20 @@ button {
                     })
                     .attr("x", 0)
                     .attr("y", function(d) {
-                        return mobileScreen? -35: -25;
+                        return mobileScreen? -35: -height/27;
                     })
                     .attr("width", function(d) {
                         if (d.children) {
                             return 0 ;
                         } else {
-                            return mobileScreen? 70: 50;
+                            return mobileScreen? 70: height/13.5;
                         }
                     })
                     .attr("height", function(d) {
                         if (d.children) {
                             return 0 ;
                         } else {
-                            return mobileScreen? 60: 50;
+                            return mobileScreen? 70: height/13.5;
                         }
                     })
                     .attr("transform", function(d) {
@@ -203,9 +203,10 @@ button {
 
                 // append candidates' names 
                 nodeEnter.append("text")
+                    .attr("x",0)
                     .attr("x", function(d) {
                         if (d._children) {
-                            return mobileScreen? 110:90;
+                            return mobileScreen? 110: source.y + 50 + height/13.5 ;
                         } else {
                             return mobileScreen? -200:-180;
                        };
@@ -223,6 +224,9 @@ button {
                             return mobileScreen? "18px": "14px";
                         }
                     });
+                    // .attr("transform", function(d) {
+                    //     return d.children?  "translate(-180,0)" : "translate(" + source.y + height/7.5 + "," + 0 + ")";
+                    // });
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
@@ -463,21 +467,21 @@ button {
                         if (d.children) {
                             return mobileScreen? -90:-60;
                         } else {
-                            return mobileScreen? -110:-40;
+                            return mobileScreen? -110:-height/10;
                         }
                     })
                     .attr("width", function(d) {
                         if (d.children) {
                             return mobileScreen? 180:120;
                         } else {
-                            return mobileScreen? 220:80;
+                            return mobileScreen? 220:height/5;
                         }
                     })
                     .attr("height", function(d) {
                          if (d.children) {
                             return mobileScreen? 180:120;
                         } else {
-                            return mobileScreen? 220 :80;
+                            return mobileScreen? 220 :height/5;
                         }
                     })
                     .attr("transform", function(d) {
@@ -508,7 +512,7 @@ button {
                         if (d.children) {
                             return mobileScreen? -120:-80;
                         } else {
-                            return mobileScreen? 270:120;
+                            return mobileScreen? 270: source.y + 40 + height/5 ;
                         }
                     })
                     .attr("dy", function(d) {
