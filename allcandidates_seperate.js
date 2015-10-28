@@ -204,7 +204,7 @@ var jindal = {
     {"name": "George Pataki", "rank": "1", "size":100, "pic":"pataki.png"},
     {"name": "Rick Santorum", "rank": "2","size":100, "pic":"santorum.png"},
     {"name": "Lindsey Graham", "rank": "3","size":100, "pic":"graham.png"},
-    {"name": "Carly Fiorina", "rank": "4","size":100, "pic":"tfiorina.png"},
+    {"name": "Carly Fiorina", "rank": "4","size":100, "pic":"fiorina.png"},
     {"name": "Rand Paul", "rank": "5","size":100, "pic":"paul.png"}
    ]
   };
