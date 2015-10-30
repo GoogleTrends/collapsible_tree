@@ -24,6 +24,7 @@ button {
     fill: #000;
     stroke: #c3574a;
     stroke-width: 1.5px;
+
 }
 
 .node text {
@@ -143,6 +144,7 @@ button {
 
                 // Set "pointer-events" to all nodes, except for the root node 
                 nodeEnter.attr('pointer-events', 'all')
+                    .attr('cursor','pointer')
                     .filter(function(d) {
                         return d.name === "GOP Debate - CNBC";
                     })
