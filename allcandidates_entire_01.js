@@ -1,5 +1,5 @@
 var allcandidates = {
- "name": "Republican Debate",
+ "name": "Republican Debate Fox Business/WSJ",
  "rank": "",
  "size": 0,
  "pic":  "trump.png",

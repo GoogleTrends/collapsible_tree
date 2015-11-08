@@ -210,31 +210,112 @@ button {
 
 
                 // append candidates' names 
-                nodeEnter.append("text")
-                    .attr("x",0)
-                    .attr("x", function(d) {
-                        if (d._children) {
-                            return mobileScreen? source.y + 40 + height/13.5: source.y + 50 + height/13.5 ;
-                        } else {
-                            return mobileScreen? -110:-160;
-                       };
-                    })
-                    .attr("dy", ".25em")
-                    .attr("text-anchor", "start")
-                    .text(function(d) {
-                        return d.name;
-                    })
-                    .style("fill", "#C53929")
-                    .style("font-size", function(d){
-                        if (d.children) {
-                            return mobileScreen? "12px":"18px" ;
-                        } else {
-                            return mobileScreen? "12px": "14px";
-                        }
-                    });
-                    // .attr("transform", function(d) {
-                    //     return d.children?  "translate(-180,0)" : "translate(" + source.y + height/7.5 + "," + 0 + ")";
-                    // });
+
+                if (mobileScreen) {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .attr("dx", function(d) {
+                            if (d._children) {
+                                return source.y + 30 + height / 10;
+                            } else {
+                                return 0;
+                            };
+                        })
+                        .attr("y", function(d) {
+                            if (d._children) {
+                                return 0 ;
+                            } else {
+                                return -20;
+                            };
+                        })
+                        .attr("dy", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return ".5em";
+                            };
+                        })
+                        .attr("transform", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return "translate(" + (source.y - 60) + "," + 0 + ")"
+                            };
+                        })
+                        .attr("text-anchor", function(d) {
+                            if (d._children) {
+                                return "start";
+                            } else {
+                                return "middle";
+                            };
+                        })
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#C53929")
+                        .style("font-size", function(d) {
+                            if (d._children) {
+                                return "12px";
+                            } else {
+                                return "16px"
+                            };
+                        })
+                        .call(wrap, 120);
+
+                } else {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .attr("dx", function(d) {
+                            if (d._children) {
+                                return source.y + 30 + height / 10;
+                            } else {
+                                return 0;
+                            };
+                        })
+                        .attr("y", function(d) {
+                            if (d._children) {
+                                return 0 ;
+                            } else {
+                                return -12;
+                            };
+                        })
+                        .attr("dy", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return ".5em";
+                            };
+                        })
+                        .attr("transform", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return "translate(" + (source.y - 90) + "," + 0 + ")"
+                            };
+                        })
+                        .attr("text-anchor", function(d) {
+                            if (d._children) {
+                                return "start";
+                            } else {
+                                return "middle";
+                            };
+                        })
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#C53929")
+                        .style("font-size", function(d) {
+                            if (d._children) {
+                                return "14px";
+                            } else {
+                                return "18px"
+                            };
+                        })
+                        .call(wrap, 170);
+
+                }
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
@@ -639,6 +720,32 @@ button {
 
 
         };
+
+         function wrap(text, width) {
+            text.each(function() {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+
+            })
+        };
+
 
 
     }
