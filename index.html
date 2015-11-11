@@ -331,42 +331,42 @@ button {
             svg.selectAll("text").remove();
             svg.selectAll(".link").remove();
 
-            console.log(currentCandidate)
-
             root = [];
 
-            currentCandidate = currentCandidate.substr(1);
+            currentCandidate = currentCandidate.replace(/[0-9]/g,'');
+
+            console.log(currentCandidate);
 
 
-            if (currentCandidate == "Donald Trump") {
+            if (currentCandidate === "Donald Trump") {
                 root = trump;
-            } else if (currentCandidate == "Ben Carson") {
+            } else if (currentCandidate === "Ben Carson") {
                 root = carson;
-            } else if (currentCandidate == "Carly Fiorina") {
+            } else if (currentCandidate === "Carly Fiorina") {
                 root = fiorina;
-            } else if (currentCandidate == "Jeb Bush") {
+            } else if (currentCandidate === "Jeb Bush") {
                 root = bush;
-            } else if (currentCandidate == "Marco Rubio") {
+            } else if (currentCandidate === "Marco Rubio") {
                 root = rubio;
-            } else if (currentCandidate == "Ted Cruz") {
+            } else if (currentCandidate === "Ted Cruz") {
                 root = cruz;
-            } else if (currentCandidate == "Rand Paul") {
+            } else if (currentCandidate === "Rand Paul") {
                 root = paul;
-            } else if (currentCandidate == "Chris Christie") {
+            } else if (currentCandidate === "Chris Christie") {
                 root = christie;
-            } else if (currentCandidate == "Mike Huckabee") {
+            } else if (currentCandidate === "Mike Huckabee") {
                 root = huckabee;
-            } else if (currentCandidate == "John Kasich") {
+            } else if (currentCandidate === "John Kasich") {
                 root = kasich;
-            } else if (currentCandidate == "Lindsey Graham") {
+            } else if (currentCandidate === "Lindsey Graham") {
                 root = graham;
-            } else if (currentCandidate == "Bobby Jindal") {
+            } else if (currentCandidate === "Bobby Jindal") {
                 root = jindal;
-            } else if (currentCandidate == "George Pataki") {
+            } else if (currentCandidate === "George Pataki") {
                 root = pataki;
-            } else if (currentCandidate == "Rick Santorum") {
+            } else if (currentCandidate === "Rick Santorum") {
                 root = santorum;
-            } else if (currentCandidate == "Jim Gilmore") {
+            } else if (currentCandidate === "Jim Gilmore") {
                 root = gilmore;
             };
 

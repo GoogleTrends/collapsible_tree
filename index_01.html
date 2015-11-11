@@ -415,7 +415,7 @@ button {
 
             root = [];
 
-            currentCandidate = currentCandidate.substr(1);
+            currentCandidate = currentCandidate.replace(/[0-9]/g,'');
 
             if (currentCandidate == "Donald Trump") {
                 root = trump;
