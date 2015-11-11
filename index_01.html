@@ -39,7 +39,7 @@ button {
 </style>
 
 <body>
-    <div id="main" role="main">
+    <div id="main" role="main" style="display:none">
         <div class="btn-group" data-toggle="buttons-radio">
             <button type="button" id="allcandidates" class="btn switch" value="candidates">All Candidates</button>
         </div>
@@ -102,6 +102,7 @@ button {
 
         function repeat() {
 
+            document.getElementById("main").style.display = "none";
 
             function collapse(d) {
                 if (d.children) {
@@ -414,35 +415,37 @@ button {
 
             root = [];
 
-            if (currentCandidate === "1Donald Trump") {
+            currentCandidate = currentCandidate.substr(1);
+
+            if (currentCandidate == "Donald Trump") {
                 root = trump;
-            } else if (currentCandidate === "2Ben Carson") {
+            } else if (currentCandidate == "Ben Carson") {
                 root = carson;
-            } else if (currentCandidate === "3Marco Rubio") {
+            } else if (currentCandidate == "Marco Rubio") {
                 root = rubio;
-            } else if (currentCandidate === "4Ted Cruz") {
+            } else if (currentCandidate == "Ted Cruz") {
                 root = cruz;
-            } else if (currentCandidate === "5Jeb Bush") {
+            } else if (currentCandidate == "Jeb Bush") {
                 root = bush;
-            } else if (currentCandidate === "6Carly Fiorina") {
+            } else if (currentCandidate == "Carly Fiorina") {
                 root = fiorina;
-            } else if (currentCandidate === "7John Kasich") {
+            } else if (currentCandidate == "John Kasich") {
                 root = kasich;
-            } else if (currentCandidate === "8Rand Paul") {
+            } else if (currentCandidate == "Rand Paul") {
                 root = paul;
-            } else if (currentCandidate === "9Chris Christie") {
+            } else if (currentCandidate == "Chris Christie") {
                 root = christie;
-            } else if (currentCandidate === "10Mike Huckabee") {
+            } else if (currentCandidate == "Mike Huckabee") {
                 root = huckabee;
-            } else if (currentCandidate === "11Lindsey Graham") {
+            } else if (currentCandidate == "Lindsey Graham") {
                 root = graham;
-            } else if (currentCandidate === "12Bobby Jindal") {
+            } else if (currentCandidate == "Bobby Jindal") {
                 root = jindal;
-            } else if (currentCandidate === "13Rick Santorum") {
+            } else if (currentCandidate == "Rick Santorum") {
                 root = santorum;
-            } else if (currentCandidate === "14George Pataki") {
+            } else if (currentCandidate == "George Pataki") {
                 root = pataki;
-            } else if (currentCandidate === "15Jim Gilmore") {
+            } else if (currentCandidate == "Jim Gilmore") {
                 root = gilmore;
             };
 
@@ -487,6 +490,8 @@ button {
         
         function repeat_solo() {
 
+            document.getElementById("main").style.display = "block";
+
 
             function collapse(d) {
                 if (d.children) {
@@ -524,7 +529,8 @@ button {
                     .attr("class", "node")
                     .attr("transform", function(d) {
                         return "translate(" + source.y0 + "," + source.x0 + ")";
-                    });
+                    })
+                    .on("click", click);
 
                 //append circles
                 nodeEnter.append("circle")
