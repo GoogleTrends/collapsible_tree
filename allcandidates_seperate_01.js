@@ -1,4 +1,4 @@
- var trump = {
+var trump = {
    "name": "Donald Trump",
    "rank": "1",
    "size":100,
@@ -207,6 +207,3 @@ var jindal = {
     {"name": "Carly Fiorina", "rank": "3","size":100, "pic":"fiorina.png"}
    ]
   };
-
-
-
