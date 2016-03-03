@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Republican Debate</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="bootstrap.min.css">
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn-group {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+button {
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #565555;
+}
+
+.node circle {
+    fill: #000;
+    stroke: #c3574a;
+    stroke-width: 1.5px;
+
+}
+
+.node text {
+    font: 14px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+}
+
+#credit p{
+    font-size: 10px;
+    color:darkgrey;
+    margin-left: 20px
+}
+
+</style>
+
+<body>
+    <div id="main" role="main" style="display:none">
+        <div class="btn-group" data-toggle="buttons-radio">
+            <button type="button" id="allcandidates" class="btn switch" value="candidates">All Candidates</button>
+        </div>
+    </div>
+    <div id="graphic"></div>
+    <div id="credit">
+    <p>Designed by Jieqian Zhang</p>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="allcandidates_entire_03.js"></script>
+    <script src="allcandidates_seperate_03.js"></script>
+    <script>
+    function drawGraphic() {
+
+        var screenHeight = $(window).height();
+        var screenWidth = $(window).width();
+        mobileScreen = (screenWidth > 420 ? false:true)
+
+
+        var margin = {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: mobileScreen? 120: 200,
+            };
+
+        if (mobileScreen){
+            var width = screenWidth;
+        } else {
+            var width = 1200 - margin.left - margin.right;
+        };
+
+        height = screenHeight - margin.top - margin.bottom - 50;
+
+        var i = 0,
+            duration = 750,
+            root;
+
+        var tree = d3.layout.tree()
+            // .separation(function(a, b) {
+            //     return (a.children == b.children ? 1 : 1.5);
+            // })
+            .size([height, width]);
+
+        var diagonal = d3.svg.diagonal()
+            .projection(function(d) {
+                return [d.y, d.x];
+            });
+
+        var svg = d3.select("#graphic").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            // .call(responsivefy)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Note: Instead of importing .json data file, I imported a .js file so to avoid the asynchronous nature of an external request. Please give the var a name in the .js file, and apply the data to root.
+        // The children node expanding only works with .js data file!
+        root = allcandidates;
+        root.x0 = height / 2;
+        root.y0 = 0;
+
+        function repeat() {
+
+            document.getElementById("main").style.display = "none";
+
+            function collapse(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children.forEach(collapse);
+                    d.children = null;
+                }
+            }
+            root.children.forEach(collapse);
+            update(root);
+
+
+            d3.select(self.frameElement).style("height", "800px");
+
+            function update(source) {
+
+                // Compute the new tree layout.
+                var nodes = tree.nodes(root).reverse(),
+                    links = tree.links(nodes);
+
+                // Normalize for fixed-depth.
+                nodes.forEach(function(d) {
+                    d.y = mobileScreen? d.depth * 50: d.depth * 300;
+                });
+
+                // Update the nodes…
+                var node = svg.selectAll("g.node")
+                    .data(nodes, function(d) {
+                        return d.id || (d.id = ++i);
+                    });
+
+
+                // Enter any new nodes at the parent's previous position.
+                var nodeEnter = node.enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", function(d) {
+                        return "translate(" + source.y0 + "," + source.x0 + ")";
+                    })
+                    .on("click", click);
+
+                // Set "pointer-events" to all nodes, except for the root node 
+                nodeEnter.attr('pointer-events', 'all')
+                    .attr('cursor','pointer')
+                    .filter(function(d) {
+                        return d.name === "Super Tuesday";
+                    })
+                    .attr('pointer-events', 'none');
+
+
+                //append circles
+                nodeEnter.append("circle")
+                    .attr("r", function(d) {
+                        return Math.sqrt(d.size) * 1;
+                    })
+                    .style("fill", function(d) {
+                        return d._children ? "#c3574a" : "#fff";
+                    })
+                    .style("stroke", function(d) {
+                        return d.name === "Super Tuesday" ? "#fff" : "#c3574a";
+                    });
+
+
+                //append circle for illustrations
+                nodeEnter.append("image")
+                    .attr("xlink:href", function(d) {
+                        return d.pic;
+                    })
+                    .attr("x", 0)
+                    .attr("y", function(d) {
+                        return mobileScreen ? -height / 20 : -height / 10;
+                    })
+                    .attr("width", function(d) {
+                        if (d.children) {
+                            return 0;
+                        } else {
+                            return mobileScreen ? height / 10 : height / 5;
+                        }
+                    })
+                    .attr("height", function(d) {
+                        if (d.children) {
+                            return 0;
+                        } else {
+                            return mobileScreen ? height / 10 : height / 5;
+                        }
+                    })
+                    .attr("transform", function(d) {
+                        return "translate(" + source.y + 30 + "," + 0 + ")";
+                    })
+                    .attr("dy", ".35em");
+
+                // append candidates' rank
+                nodeEnter.append("text")
+                    .attr("x", 0)
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text(function(d) {
+                        return d.rank;
+                    })
+                    .style("fill-opacity", 0)
+                    .style("fill", function(d) {
+                        return d._children ? "#fff" : "#c3574a";
+                    })
+                    .style("font-size",function(d){
+                            return mobileScreen? "12px":"14px";
+                    });
+
+
+                // append candidates' names 
+
+                if (mobileScreen) {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .attr("dx", function(d) {
+                            if (d._children) {
+                                return source.y + 40 + height / 10;
+                            } else {
+                                return 0;
+                            };
+                        })
+                        .attr("y", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return -20;
+                            };
+                        })
+                        .attr("dy", function(d) {
+                            if (d._children) {
+                                return ".35em";
+                            } else {
+                                return ".5em";
+                            };
+                        })
+                        .attr("transform", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return "translate(" + (source.y - 60) + "," + 0 + ")"
+                            };
+                        })
+                        .attr("text-anchor", function(d) {
+                            if (d._children) {
+                                return "start";
+                            } else {
+                                return "middle";
+                            };
+                        })
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#C53929")
+                        .style("font-size", function(d) {
+                            if (d._children) {
+                                return "12px";
+                            } else {
+                                return "16px"
+                            };
+                        })
+                        .call(wrap, 120);
+
+                } else {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .style("fill", "#C53929")
+                        .style("font-size", function(d) {
+                            if (d.children) {
+                                return "18px";
+                            } else {
+                                return "14px";
+                            }
+                        })
+                        .attr("x", function(d) {
+                            if (d._children) {
+                                return source.y + 50 + height / 5;
+                            } else {
+                                return -150;
+                            };
+                        })
+                        .attr("dy", ".25em")
+                        .attr("text-anchor", "start")
+                        .text(function(d) {
+                            return d.name;
+                        });
+
+                }
+
+                // Transition nodes to their new position.
+                var nodeUpdate = node.transition()
+                    .duration(duration)
+                    .attr("transform", function(d) {
+                        return "translate(" + d.y + "," + d.x + ")";
+                    });
+
+                nodeUpdate.select("circle")
+                    .attr("r", function(d) {
+                        return mobileScreen? Math.sqrt(d.size) * 1 : Math.sqrt(d.size) * 1.2;
+                    })
+                    .style("fill", function(d) {
+                        return d._children ? "#c3574a" : "#fff";
+                    });
+
+                nodeUpdate.select("text")
+                    .style("fill-opacity", 1);
+
+                // Transition exiting nodes to the parent's new position.
+                var nodeExit = node.exit().transition()
+                    .duration(duration)
+                    .attr("transform", function(d) {
+                        return "translate(" + source.y + "," + source.x + ")";
+                    })
+                    .remove();
+
+                nodeExit.select("circle")
+                    .attr("r", 20);
+
+                nodeExit.select("text")
+                    .style("opacity", 0);
+
+                // Update the links…
+                var link = svg.selectAll("path.link")
+                    .data(links, function(d) {
+                        return d.target.id;
+                    });
+
+
+                // Enter any new links at the parent's previous position.
+                link.enter().insert("path", "g")
+                    .attr("class", "link")
+                    .attr("d", function(d) {
+                        var o = {
+                            x: source.x0,
+                            y: source.y0
+                        };
+                        return diagonal({
+                            source: o,
+                            target: o
+                        });
+                    })
+                    .style("stroke-dasharray", ("3, 3"));
+
+                // Transition links to their new position.
+                link.transition()
+                    .duration(duration)
+                    .attr("d", diagonal);
+
+                // Transition exiting nodes to the parent's new position.
+                link.exit().transition()
+                    .duration(duration)
+                    .attr("d", function(d) {
+                        var o = {
+                            x: source.x,
+                            y: source.y
+                        };
+                        return diagonal({
+                            source: o,
+                            target: o
+                        });
+                    })
+                    .remove();
+
+                // Stash the old positions for transition.
+                nodes.forEach(function(d) {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
+
+            }
+
+        };
+        repeat();
+
+        // the click function 
+        function click(d) {
+
+            var currentCandidate = $(this).text();
+            svg.selectAll(".node").remove();
+            svg.selectAll("text").remove();
+            svg.selectAll(".link").remove();
+
+            console.log(currentCandidate)
+
+            root = [];
+
+            currentCandidate = currentCandidate.replace(/[0-9]/g,'');
+
+            if (currentCandidate == "Donald Trump") {
+                root = trump;
+            } else if (currentCandidate == "Ben Carson") {
+                root = carson;
+            } else if (currentCandidate == "Marco Rubio") {
+                root = rubio;
+            } else if (currentCandidate == "Ted Cruz") {
+                root = cruz;
+            } else if (currentCandidate == "Jeb Bush") {
+                root = bush;
+            } else if (currentCandidate == "Carly Fiorina") {
+                root = fiorina;
+            } else if (currentCandidate == "John Kasich") {
+                root = kasich;
+            } else if (currentCandidate == "Rand Paul") {
+                root = paul;
+            } else if (currentCandidate == "Chris Christie") {
+                root = christie;
+            } else if (currentCandidate == "Mike Huckabee") {
+                root = huckabee;
+            } else if (currentCandidate == "Lindsey Graham") {
+                root = graham;
+            } else if (currentCandidate == "Bobby Jindal") {
+                root = jindal;
+            } else if (currentCandidate == "Rick Santorum") {
+                root = santorum;
+            } else if (currentCandidate == "George Pataki") {
+                root = pataki;
+            } else if (currentCandidate == "Jim Gilmore") {
+                root = gilmore;
+            };
+
+            root.x0 = height / 2;
+            root.y0 = 0;
+
+            repeat_solo();
+
+            // repeat();
+
+
+
+
+
+        }
+
+
+
+
+
+        // *********************************************************************************************************************************************************** the button click function ************************************************************************* //
+
+        $(".btn").on("click", function() {
+            // $(".btn").removeClass("active");
+            // $(this).addClass("active");
+            var currentSelect = $(this).attr("id");
+
+            svg.selectAll(".node").remove();
+            svg.selectAll(".link").remove();
+            svg.select("text").remove();
+
+            root = [];
+            root = allcandidates;
+            root.x0 = height / 2;
+            root.y0 = 0;
+
+            repeat();
+
+        });
+
+
+        
+        function repeat_solo() {
+
+            document.getElementById("main").style.display = "block";
+
+
+            function collapse(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children.forEach(collapse);
+                    d.children = null;
+                }
+            }
+            root.children.forEach(collapse);
+            update(root);
+
+
+            d3.select(self.frameElement).style("height", "800px");
+
+            function update(source) {
+
+                // Compute the new tree layout.
+                var nodes = tree.nodes(root).reverse(),
+                    links = tree.links(nodes);
+
+                // Normalize for fixed-depth.
+                nodes.forEach(function(d) {
+                    d.y = mobileScreen ? d.depth * 50 : d.depth * 300;
+                });
+
+                // Update the nodes…
+                var node = svg.selectAll("g.node")
+                    .data(nodes, function(d) {
+                        return d.id || (d.id = ++i);
+                    });
+
+
+                // Enter any new nodes at the parent's previous position.
+                var nodeEnter = node.enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", function(d) {
+                        return "translate(" + source.y0 + "," + source.x0 + ")";
+                    })
+                    .on("click", click);
+
+                //append circles
+                nodeEnter.append("circle")
+                    .attr("r", function(d) {
+                        return mobileScreen ? Math.sqrt(d.size) * 1 : Math.sqrt(d.size) * 1;
+                    })
+                    .style("fill", function(d) {
+                        if (d.children) {
+                            return "#c3574a";
+                        } else {
+                            return "#fff";
+                        }
+                    });
+
+                //append circle for illustrations
+
+                nodeEnter.append("image")
+                    .attr("xlink:href", function(d) {
+                        return d.pic;
+                    })
+                    .attr("x", function(d) {
+                        if (d.children) {
+                            return mobileScreen ? -height / 7 - 50 : -170;
+                        } else {
+                            return 0;
+                        }
+                    })
+                    .attr("y", function(d) {
+                        if (d.children) {
+                            return mobileScreen ? -height / 14 : -60;
+                        } else {
+                            return mobileScreen ? -height / 14 : -height / 10;
+                        }
+                    })
+                    .attr("width", function(d) {
+                        if (d.children) {
+                            return mobileScreen ? height / 7 : 120;
+                        } else {
+                            return mobileScreen ? height/7 : height / 5;
+                        }
+                    })
+                    .attr("height", function(d) {
+                        if (d.children) {
+                            return mobileScreen ? height / 7 : 120;
+                        } else {
+                            return mobileScreen? height/7 : height / 5;
+                        }
+                    })
+                    .attr("transform", function(d) {
+                        return "translate(" + source.y + 30 + "," + 0 + ")";
+                    })
+                    .attr("dy", ".35em");
+
+
+                // append candidates' rank
+                nodeEnter.append("text")
+                    .attr("x", 0)
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text(function(d) {
+                        return d.rank;
+                    })
+                    .style("fill", function(d) {
+                        return d.children ? "#fff" : "#c3574a";
+                    })
+                    .style("font-size", function(d) {
+                        return mobileScreen? "12px":"14px";
+                    });
+
+
+                // append candidates' names 
+                if (mobileScreen) {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .attr("y", function(d) {
+                            if (d.children) {
+                                return height / 14 + 15;
+                            } else {
+                                return height/14 + 10;
+                            };
+                        })
+                        .attr("transform", function(d) {
+                            if (d.children) {
+                                return "translate(" + (source.y - height/14 -20 ) + "," + 0 + ")"
+                            } else {
+                                return "translate(" + (source.y + height/14 + 30 ) + "," + 0 + ")"
+                            };
+                        })
+                        .attr("text-anchor", "middle")
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#c3574a")
+                        .style("font-size", "12px");
+
+                } else {
+
+                    nodeEnter.append("text")
+                        .attr("x", function(d) {
+
+                            if (d.children) {
+                                return -80;
+                            } else {
+                                return height / 5 + 50;
+                            }
+                        })
+                        .attr("dy", function(d) {
+                            if (d.children) {
+                                return "6em";
+                            } else {
+                                return ".35em";
+                            }
+                        })
+                        .attr("text-anchor", function(d) {
+                            if (d.children) {
+                                return "middle";
+                            } else {
+                                return "start";
+                            }
+                        })
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#c3574a")
+                        .style("font-size", "14px");
+
+                };
+
+
+
+                // Transition nodes to their new position.
+                var nodeUpdate = node.transition()
+                    .duration(duration)
+                    .attr("transform", function(d) {
+                        return "translate(" + d.y + "," + d.x + ")";
+                    });
+
+                nodeUpdate.select("circle")
+                    .attr("r", function(d) {
+                        return mobileScreen ? Math.sqrt(d.size) * 1 : Math.sqrt(d.size) * 1.2;
+                    })
+                    .style("fill", function(d) {
+                        return d.children ? "#c3574a" : "#fff";
+                    });
+
+                nodeUpdate.select("text")
+                    .style("fill-opacity", 1);
+
+                // Transition exiting nodes to the parent's new position.
+                var nodeExit = node.exit().transition()
+                    .duration(duration)
+                    .attr("transform", function(d) {
+                        return "translate(" + source.y + "," + source.x + ")";
+                    })
+                    .remove();
+
+                nodeExit.select("circle")
+                    .attr("r", 20);
+
+                nodeExit.select("text")
+                    .style("opacity", 0);
+
+                // Update the links…
+                var link = svg.selectAll("path.link")
+                    .data(links, function(d) {
+                        return d.target.id;
+                    });
+
+
+                // // Enter any new links at the parent's previous position.
+                link.enter().insert("path", "g")
+                    .attr("class", "link")
+                    .attr("d", function(d) {
+                        var o = {
+                            x: source.x0,
+                            y: source.y0
+                        };
+                        return diagonal({
+                            source: o,
+                            target: o
+                        });
+                    })
+                    .style("stroke-dasharray", ("3, 3"));
+
+                // Transition links to their new position.
+                link.transition()
+                    .duration(duration)
+                    .attr("d", diagonal);
+
+            }
+
+
+
+        };
+
+         function wrap(text, width) {
+            text.each(function() {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+
+            })
+        };
+
+
+
+    }
+    </script>
+</body>
+<script>
+drawGraphic()
+</script>
