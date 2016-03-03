@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>CNBC Republican Debate</title>
+<title>Republican Debate</title>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="bootstrap.min.css">
 <style>
@@ -9,7 +9,7 @@ body {
 }
 
 .btn-group {
-    margin-left: 50px;
+    margin-left: 20px;
     margin-top: 10px;
 }
 
@@ -36,6 +36,13 @@ button {
     stroke: #ccc;
     stroke-width: 2px;
 }
+
+#credit p{
+    font-size: 10px;
+    color:darkgrey;
+    margin-left: 20px
+}
+
 </style>
 
 <body>
@@ -45,10 +52,13 @@ button {
         </div>
     </div>
     <div id="graphic"></div>
+    <div id="credit">
+    <p>Designed by Jieqian Zhang</p>
+    </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-    <script src="allcandidates_entire.js"></script>
-    <script src="allcandidates_seperate.js"></script>
+    <script src="allcandidates_entire_03.js"></script>
+    <script src="allcandidates_seperate_03.js"></script>
     <script>
     function drawGraphic() {
 
@@ -61,7 +71,7 @@ button {
                 top: 20,
                 right: 20,
                 bottom: 20,
-                left: mobileScreen? 155: 200,
+                left: mobileScreen? 120: 200,
             };
 
         if (mobileScreen){
@@ -104,7 +114,6 @@ button {
 
             document.getElementById("main").style.display = "none";
 
-
             function collapse(d) {
                 if (d.children) {
                     d._children = d.children;
@@ -126,7 +135,7 @@ button {
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
-                    d.y = mobileScreen? d.depth * 70: d.depth * 300;
+                    d.y = mobileScreen? d.depth * 50: d.depth * 300;
                 });
 
                 // Update the nodes…
@@ -148,7 +157,7 @@ button {
                 nodeEnter.attr('pointer-events', 'all')
                     .attr('cursor','pointer')
                     .filter(function(d) {
-                        return d.name === "GOP Debate - CNBC";
+                        return d.name === "Super Tuesday";
                     })
                     .attr('pointer-events', 'none');
 
@@ -162,7 +171,7 @@ button {
                         return d._children ? "#c3574a" : "#fff";
                     })
                     .style("stroke", function(d) {
-                        return d.name === "GOP Debate - CNBC" ? "#fff" : "#c3574a";
+                        return d.name === "Super Tuesday" ? "#fff" : "#c3574a";
                     });
 
 
@@ -173,20 +182,20 @@ button {
                     })
                     .attr("x", 0)
                     .attr("y", function(d) {
-                        return mobileScreen? -height/27: -height/27;
+                        return mobileScreen ? -height / 20 : -height / 10;
                     })
                     .attr("width", function(d) {
                         if (d.children) {
-                            return 0 ;
+                            return 0;
                         } else {
-                            return mobileScreen? height/13.5: height/13.5;
+                            return mobileScreen ? height / 10 : height / 5;
                         }
                     })
                     .attr("height", function(d) {
                         if (d.children) {
-                            return 0 ;
+                            return 0;
                         } else {
-                            return mobileScreen? height/13.5: height/13.5;
+                            return mobileScreen ? height / 10 : height / 5;
                         }
                     })
                     .attr("transform", function(d) {
@@ -212,31 +221,85 @@ button {
 
 
                 // append candidates' names 
-                nodeEnter.append("text")
-                    .attr("x",0)
-                    .attr("x", function(d) {
-                        if (d._children) {
-                            return mobileScreen? source.y + 40 + height/13.5: source.y + 50 + height/13.5 ;
-                        } else {
-                            return mobileScreen? -150:-180;
-                       };
-                    })
-                    .attr("dy", ".25em")
-                    .attr("text-anchor", "start")
-                    .text(function(d) {
-                        return d.name;
-                    })
-                    .style("fill", "#C53929")
-                    .style("font-size", function(d){
-                        if (d.children) {
-                            return mobileScreen? "14px":"18px" ;
-                        } else {
-                            return mobileScreen? "14px": "14px";
-                        }
-                    });
-                    // .attr("transform", function(d) {
-                    //     return d.children?  "translate(-180,0)" : "translate(" + source.y + height/7.5 + "," + 0 + ")";
-                    // });
+
+                if (mobileScreen) {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .attr("dx", function(d) {
+                            if (d._children) {
+                                return source.y + 40 + height / 10;
+                            } else {
+                                return 0;
+                            };
+                        })
+                        .attr("y", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return -20;
+                            };
+                        })
+                        .attr("dy", function(d) {
+                            if (d._children) {
+                                return ".35em";
+                            } else {
+                                return ".5em";
+                            };
+                        })
+                        .attr("transform", function(d) {
+                            if (d._children) {
+                                return 0;
+                            } else {
+                                return "translate(" + (source.y - 60) + "," + 0 + ")"
+                            };
+                        })
+                        .attr("text-anchor", function(d) {
+                            if (d._children) {
+                                return "start";
+                            } else {
+                                return "middle";
+                            };
+                        })
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#C53929")
+                        .style("font-size", function(d) {
+                            if (d._children) {
+                                return "12px";
+                            } else {
+                                return "16px"
+                            };
+                        })
+                        .call(wrap, 120);
+
+                } else {
+
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .style("fill", "#C53929")
+                        .style("font-size", function(d) {
+                            if (d.children) {
+                                return "18px";
+                            } else {
+                                return "14px";
+                            }
+                        })
+                        .attr("x", function(d) {
+                            if (d._children) {
+                                return source.y + 50 + height / 5;
+                            } else {
+                                return -150;
+                            };
+                        })
+                        .attr("dy", ".25em")
+                        .attr("text-anchor", "start")
+                        .text(function(d) {
+                            return d.name;
+                        });
+
+                }
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
@@ -247,7 +310,7 @@ button {
 
                 nodeUpdate.select("circle")
                     .attr("r", function(d) {
-                        return mobileScreen? Math.sqrt(d.size) * 1.5 : Math.sqrt(d.size) * 1.2;
+                        return mobileScreen? Math.sqrt(d.size) * 1 : Math.sqrt(d.size) * 1.2;
                     })
                     .style("fill", function(d) {
                         return d._children ? "#c3574a" : "#fff";
@@ -331,44 +394,41 @@ button {
             svg.selectAll("text").remove();
             svg.selectAll(".link").remove();
 
+            console.log(currentCandidate)
+
             root = [];
 
             currentCandidate = currentCandidate.replace(/[0-9]/g,'');
 
-            console.log(currentCandidate);
-
-            // Depending on which candidate user clicks on, the root is different.
-
-
-            if (currentCandidate === "Donald Trump") {
+            if (currentCandidate == "Donald Trump") {
                 root = trump;
-            } else if (currentCandidate === "Ben Carson") {
+            } else if (currentCandidate == "Ben Carson") {
                 root = carson;
-            } else if (currentCandidate === "Carly Fiorina") {
-                root = fiorina;
-            } else if (currentCandidate === "Jeb Bush") {
-                root = bush;
-            } else if (currentCandidate === "Marco Rubio") {
+            } else if (currentCandidate == "Marco Rubio") {
                 root = rubio;
-            } else if (currentCandidate === "Ted Cruz") {
+            } else if (currentCandidate == "Ted Cruz") {
                 root = cruz;
-            } else if (currentCandidate === "Rand Paul") {
-                root = paul;
-            } else if (currentCandidate === "Chris Christie") {
-                root = christie;
-            } else if (currentCandidate === "Mike Huckabee") {
-                root = huckabee;
-            } else if (currentCandidate === "John Kasich") {
+            } else if (currentCandidate == "Jeb Bush") {
+                root = bush;
+            } else if (currentCandidate == "Carly Fiorina") {
+                root = fiorina;
+            } else if (currentCandidate == "John Kasich") {
                 root = kasich;
-            } else if (currentCandidate === "Lindsey Graham") {
+            } else if (currentCandidate == "Rand Paul") {
+                root = paul;
+            } else if (currentCandidate == "Chris Christie") {
+                root = christie;
+            } else if (currentCandidate == "Mike Huckabee") {
+                root = huckabee;
+            } else if (currentCandidate == "Lindsey Graham") {
                 root = graham;
-            } else if (currentCandidate === "Bobby Jindal") {
+            } else if (currentCandidate == "Bobby Jindal") {
                 root = jindal;
-            } else if (currentCandidate === "George Pataki") {
-                root = pataki;
-            } else if (currentCandidate === "Rick Santorum") {
+            } else if (currentCandidate == "Rick Santorum") {
                 root = santorum;
-            } else if (currentCandidate === "Jim Gilmore") {
+            } else if (currentCandidate == "George Pataki") {
+                root = pataki;
+            } else if (currentCandidate == "Jim Gilmore") {
                 root = gilmore;
             };
 
@@ -377,7 +437,12 @@ button {
 
             repeat_solo();
 
-           
+            // repeat();
+
+
+
+
+
         }
 
 
@@ -405,9 +470,11 @@ button {
         });
 
 
+        
         function repeat_solo() {
 
             document.getElementById("main").style.display = "block";
+
 
             function collapse(d) {
                 if (d.children) {
@@ -430,7 +497,7 @@ button {
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
-                    d.y = mobileScreen? d.depth * 70: d.depth * 300;
+                    d.y = mobileScreen ? d.depth * 50 : d.depth * 300;
                 });
 
                 // Update the nodes…
@@ -451,7 +518,7 @@ button {
                 //append circles
                 nodeEnter.append("circle")
                     .attr("r", function(d) {
-                        return mobileScreen? Math.sqrt(d.size) * 1.3 : Math.sqrt(d.size) * 1;
+                        return mobileScreen ? Math.sqrt(d.size) * 1 : Math.sqrt(d.size) * 1;
                     })
                     .style("fill", function(d) {
                         if (d.children) {
@@ -469,30 +536,30 @@ button {
                     })
                     .attr("x", function(d) {
                         if (d.children) {
-                            return mobileScreen? -height/6 - 60: -170;
+                            return mobileScreen ? -height / 7 - 50 : -170;
                         } else {
                             return 0;
                         }
                     })
                     .attr("y", function(d) {
                         if (d.children) {
-                            return mobileScreen? -height/12:-60;
+                            return mobileScreen ? -height / 14 : -60;
                         } else {
-                            return mobileScreen? -height/10:-height/10;
+                            return mobileScreen ? -height / 14 : -height / 10;
                         }
                     })
                     .attr("width", function(d) {
                         if (d.children) {
-                            return mobileScreen? height/6:120;
+                            return mobileScreen ? height / 7 : 120;
                         } else {
-                            return height/5;
+                            return mobileScreen ? height/7 : height / 5;
                         }
                     })
                     .attr("height", function(d) {
-                         if (d.children) {
-                            return mobileScreen? height/6:120;
+                        if (d.children) {
+                            return mobileScreen ? height / 7 : 120;
                         } else {
-                            return height/5;
+                            return mobileScreen? height/7 : height / 5;
                         }
                     })
                     .attr("transform", function(d) {
@@ -512,46 +579,72 @@ button {
                     .style("fill", function(d) {
                         return d.children ? "#fff" : "#c3574a";
                     })
-                    .style("font-size",function(d){
-                        return "14px";
+                    .style("font-size", function(d) {
+                        return mobileScreen? "12px":"14px";
                     });
 
 
                 // append candidates' names 
-                nodeEnter.append("text")
-                    .attr("x", function(d) {
+                if (mobileScreen) {
 
-                        if (d.children) {
-                            return mobileScreen? -height/12 - 30 :-80;
-                        } else {
-                            return height/5 + 50;
-                        }
-                    })
-                    .attr("dy", function(d) {
-                        if (d.children) {
-                            return mobileScreen? height/12 + 20 + "px":"6em";
-                        } else {
-                            return ".35em";
-                        }
-                    })
-                    .attr("text-anchor", function(d) {
-                        if (d.children) {
-                            return "middle";
-                        } else {
-                            return "start";
-                        }
-                    })
-                    .text(function(d) {
-                        return d.name;
-                    })
-                    .style("fill", "#C53929")
-                    .style("font-size", function(d) {
-                        if (d.children) {
-                            return  mobileScreen? "16px":"14px";
-                        } else {
-                            return mobileScreen? "14px":"14px";
-                        }
-                    });
+                    nodeEnter.append("text")
+                        .attr("x", 0)
+                        .attr("y", function(d) {
+                            if (d.children) {
+                                return height / 14 + 15;
+                            } else {
+                                return height/14 + 10;
+                            };
+                        })
+                        .attr("transform", function(d) {
+                            if (d.children) {
+                                return "translate(" + (source.y - height/14 -20 ) + "," + 0 + ")"
+                            } else {
+                                return "translate(" + (source.y + height/14 + 30 ) + "," + 0 + ")"
+                            };
+                        })
+                        .attr("text-anchor", "middle")
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#c3574a")
+                        .style("font-size", "12px");
+
+                } else {
+
+                    nodeEnter.append("text")
+                        .attr("x", function(d) {
+
+                            if (d.children) {
+                                return -80;
+                            } else {
+                                return height / 5 + 50;
+                            }
+                        })
+                        .attr("dy", function(d) {
+                            if (d.children) {
+                                return "6em";
+                            } else {
+                                return ".35em";
+                            }
+                        })
+                        .attr("text-anchor", function(d) {
+                            if (d.children) {
+                                return "middle";
+                            } else {
+                                return "start";
+                            }
+                        })
+                        .text(function(d) {
+                            return d.name;
+                        })
+                        .style("fill", "#c3574a")
+                        .style("font-size", "14px");
+
+                };
+
+
+
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
                     .duration(duration)
@@ -561,7 +654,7 @@ button {
 
                 nodeUpdate.select("circle")
                     .attr("r", function(d) {
-                        return mobileScreen? Math.sqrt(d.size) * 1.5: Math.sqrt(d.size) * 1.2;
+                        return mobileScreen ? Math.sqrt(d.size) * 1 : Math.sqrt(d.size) * 1.2;
                     })
                     .style("fill", function(d) {
                         return d.children ? "#c3574a" : "#fff";
@@ -613,7 +706,35 @@ button {
 
             }
 
+
+
         };
+
+         function wrap(text, width) {
+            text.each(function() {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+
+            })
+        };
+
 
 
     }
